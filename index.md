@@ -1,7 +1,5 @@
 <h1>Privacy Policy</h1>
-<p>Last updated: December 13, 2021</p>
-<p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
-<p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the <a href="https://www.freeprivacypolicy.com/free-privacy-policy-generator/" target="_blank">Privacy Policy Generator</a>.</p>
+<p>Last updated: March 17, 2023</p>
 <h1>Interpretation and Definitions</h1>
 <h2>Interpretation</h2>
 <p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>
@@ -15,10 +13,10 @@
 <p><strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a party, where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.</p>
 </li>
 <li>
-<p><strong>Application</strong> means the software program provided by the Company downloaded by You on any electronic device, named Take Notes</p>
+<p><strong>Application</strong> refers to Your Family, the software program provided by the Company.</p>
 </li>
 <li>
-<p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Take Notes.</p>
+<p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Your Family.</p>
 </li>
 <li>
 <p><strong>Country</strong> refers to:  Vietnam</p>
@@ -54,6 +52,13 @@
 <p>Usage Data may include information such as Your Device's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
 <p>When You access the Service by or through a mobile device, We may collect certain information automatically, including, but not limited to, the type of mobile device You use, Your mobile device unique ID, the IP address of Your mobile device, Your mobile operating system, the type of mobile Internet browser You use, unique device identifiers and other diagnostic data.</p>
 <p>We may also collect information that Your browser sends whenever You visit our Service or when You access the Service by or through a mobile device.</p>
+<h3>Information Collected while Using the Application</h3>
+<p>While using Our Application, in order to provide features of Our Application, We may collect, with Your prior permission:</p>
+<ul>
+<li>Information regarding your location</li>
+</ul>
+<p>We use this information to provide features of Our Service, to improve and customize Our Service. The information may be uploaded to the Company's servers and/or a Service Provider's server or it may be simply stored on Your device.</p>
+<p>You can enable or disable access to this information at any time, through Your Device settings.</p>
 <h2>Use of Your Personal Data</h2>
 <p>The Company may use Personal Data for the following purposes:</p>
 <ul>
@@ -98,6 +103,11 @@
 <p>Your information, including Personal Data, is processed at the Company's operating offices and in any other places where the parties involved in the processing are located. It means that this information may be transferred to — and maintained on — computers located outside of Your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from Your jurisdiction.</p>
 <p>Your consent to this Privacy Policy followed by Your submission of such information represents Your agreement to that transfer.</p>
 <p>The Company will take all steps reasonably necessary to ensure that Your data is treated securely and in accordance with this Privacy Policy and no transfer of Your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of Your data and other personal information.</p>
+<h2>Delete Your Personal Data</h2>
+<p>You have the right to delete or request that We assist in deleting the Personal Data that We have collected about You.</p>
+<p>Our Service may give You the ability to delete certain information about You from within the Service.</p>
+<p>You may update, amend, or delete Your information at any time by signing in to Your Account, if you have one, and visiting the account settings section that allows you to manage Your personal information. You may also contact Us to request access to, correct, or delete any personal information that You have provided to Us.</p>
+<p>Please note, however, that We may need to retain certain information when we have a legal obligation or lawful basis to do so.</p>
 <h2>Disclosure of Your Personal Data</h2>
 <h3>Business Transactions</h3>
 <p>If the Company is involved in a merger, acquisition or asset sale, Your Personal Data may be transferred. We will provide notice before Your Personal Data is transferred and becomes subject to a different Privacy Policy.</p>
