@@ -1,16 +1,71 @@
 'use client';
 
-import { useState } from 'react';
-import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { ContactForm } from '@/lib/types';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { apiClient } from '@/lib/api/client';
+import { ContactForm } from '@/lib/types';
+import { AlertCircle, CheckCircle, Loader2, Send } from 'lucide-react';
+import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
 
+// =====================================
+// Types & Interfaces
+// =====================================
 interface ContactFormProps {
-  className?: string;
+    className?: string;
+    onSubmitSuccess?: (data: ContactForm) => void;
+    onSubmitError?: (error: Error) => void;
 }
 
-export default function ContactFormComponent({ className = '' }: ContactFormProps) {
-  const [formData, setFormData] = useState<ContactForm>({
+interface FormErrors {
+    [key: string]: string | undefined;
+}
+
+interface FormState {
+    data: ContactForm;
+    errors: FormErrors;
+    isSubmitting: boolean;
+    submitAttempted: boolean;
+}
+
+type FormFieldValue = string | boolean;
+
+type FormAction =
+    | { type: 'SET_FIELD'; field: keyof ContactForm; value: FormFieldValue }
+    | { type: 'SET_ERRORS'; errors: FormErrors }
+    | { type: 'SET_SUBMITTING'; isSubmitting: boolean }
+    | { type: 'RESET_FORM' }
+    | { type: 'SET_SUBMIT_ATTEMPTED'; attempted: boolean };
+
+interface SubmissionStatus {
+    type: 'idle' | 'loading' | 'success' | 'error';
+    message?: string;
+}
+
+interface FieldConstraints {
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: RegExp;
+}
+
+// =====================================
+// Constants & Configuration
+// =====================================
+const FORM_CONSTRAINTS: Record<keyof ContactForm, FieldConstraints> = {
+    firstName: { required: true, minLength: 1, maxLength: 50 },
+    lastName: { required: true, minLength: 1, maxLength: 50 },
+    email: { required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+    phone: { maxLength: 20 },
+    subject: { required: true },
+    message: { required: true, minLength: 10, maxLength: 1000 },
+    agreement: { required: true },
+} as const;
+
+const INITIAL_FORM_DATA: ContactForm = {
     firstName: '',
     lastName: '',
     email: '',
@@ -18,295 +73,465 @@ export default function ContactFormComponent({ className = '' }: ContactFormProp
     subject: '',
     message: '',
     agreement: false,
-  });
+};
 
-  const [status, setStatus] = useState<{
-    type: 'idle' | 'loading' | 'success' | 'error';
-    message?: string;
-  }>({ type: 'idle' });
+const SUBJECT_OPTIONS: { value: string; label: string }[] = [
+    { value: 'project', label: 'Thảo luận dự án' },
+    { value: 'collaboration', label: 'Hợp tác' },
+    { value: 'job', label: 'Cơ hội việc làm' },
+    { value: 'consultation', label: 'Tư vấn kỹ thuật' },
+    { value: 'other', label: 'Khác' },
+];
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+// =====================================
+// Form State Reducer
+// =====================================
+function formReducer(state: FormState, action: FormAction): FormState {
+    switch (action.type) {
+        case 'SET_FIELD':
+            return {
+                ...state,
+                data: { ...state.data, [action.field]: action.value },
+                errors: { ...state.errors, [action.field]: undefined }, // Clear field error
+            };
+        case 'SET_ERRORS':
+            return { ...state, errors: action.errors };
+        case 'SET_SUBMITTING':
+            return { ...state, isSubmitting: action.isSubmitting };
+        case 'SET_SUBMIT_ATTEMPTED':
+            return { ...state, submitAttempted: action.attempted };
+        case 'RESET_FORM':
+            return {
+                data: INITIAL_FORM_DATA,
+                errors: {},
+                isSubmitting: false,
+                submitAttempted: false,
+            };
+        default:
+            return state;
     }
-  };
+}
 
-  const validateForm = (): string[] => {
-    const errors: string[] = [];
+// =====================================
+// Validation Utilities
+// =====================================
+const validateField = (field: keyof ContactForm, value: FormFieldValue): string | undefined => {
+    const constraints = FORM_CONSTRAINTS[field];
 
-    if (!formData.firstName.trim()) {
-      errors.push('Tên là bắt buộc');
+    if (constraints?.required && (!value || (typeof value === 'string' && !value.trim()))) {
+        return getFieldErrorMessage(field, 'required');
     }
 
-    if (!formData.lastName.trim()) {
-      errors.push('Họ là bắt buộc');
+    if (typeof value === 'string' && value.trim()) {
+        if (constraints?.minLength && value.trim().length < constraints.minLength) {
+            return getFieldErrorMessage(field, 'minLength', constraints.minLength);
+        }
+
+        if (constraints?.maxLength && value.trim().length > constraints.maxLength) {
+            return getFieldErrorMessage(field, 'maxLength', constraints.maxLength);
+        }
+
+        if (constraints?.pattern && !constraints.pattern.test(value)) {
+            return getFieldErrorMessage(field, 'pattern');
+        }
     }
 
-    if (!formData.email.trim()) {
-      errors.push('Email là bắt buộc');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.push('Email không hợp lệ');
-    }
+    return undefined;
+};
 
-    if (!formData.subject) {
-      errors.push('Chủ đề là bắt buộc');
-    }
+const getFieldErrorMessage = (field: keyof ContactForm, type: string, value?: number): string => {
+    const messages: Record<string, Record<string, string>> = {
+        firstName: {
+            required: 'Tên là bắt buộc',
+            maxLength: `Tên không được vượt quá ${value} ký tự`,
+        },
+        lastName: {
+            required: 'Họ là bắt buộc',
+            maxLength: `Họ không được vượt quá ${value} ký tự`,
+        },
+        email: {
+            required: 'Email là bắt buộc',
+            pattern: 'Email không hợp lệ',
+        },
+        phone: {
+            maxLength: `Số điện thoại không được vượt quá ${value} ký tự`,
+        },
+        subject: {
+            required: 'Chủ đề là bắt buộc',
+        },
+        message: {
+            required: 'Tin nhắn là bắt buộc',
+            minLength: `Tin nhắn phải có ít nhất ${value} ký tự`,
+            maxLength: `Tin nhắn không được vượt quá ${value} ký tự`,
+        },
+        agreement: {
+            required: 'Bạn phải đồng ý với chính sách bảo mật và điều khoản sử dụng',
+        },
+    };
 
-    if (!formData.message.trim()) {
-      errors.push('Tin nhắn là bắt buộc');
-    } else if (formData.message.trim().length < 10) {
-      errors.push('Tin nhắn phải có ít nhất 10 ký tự');
-    }
+    return messages[field]?.[type] || 'Dữ liệu không hợp lệ';
+};
 
-    if (!formData.agreement) {
-      errors.push('Bạn phải đồng ý với chính sách bảo mật và điều khoản sử dụng');
-    }
+const validateForm = (data: ContactForm): FormErrors => {
+    const errors: FormErrors = {};
+
+    (Object.keys(FORM_CONSTRAINTS) as Array<keyof ContactForm>).forEach(field => {
+        const value = data[field];
+        if (value !== undefined) {
+            const error = validateField(field, value);
+            if (error) {
+                errors[field] = error;
+            }
+        }
+    });
 
     return errors;
-  };
+};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+// =====================================
+// Main Component
+// =====================================
+export default function ContactFormComponent({
+    className = '',
+    onSubmitSuccess,
+    onSubmitError
+}: ContactFormProps) {
+    const [formState, dispatch] = useReducer(formReducer, {
+        data: INITIAL_FORM_DATA,
+        errors: {},
+        isSubmitting: false,
+        submitAttempted: false,
+    });
 
-    const errors = validateForm();
-    if (errors.length > 0) {
-      setStatus({
-        type: 'error',
-        message: errors.join('. '),
-      });
-      return;
-    }
+    const [status, setStatus] = useState<SubmissionStatus>({ type: 'idle' });
+    const formRef = useRef<HTMLFormElement>(null);
 
-    setStatus({ type: 'loading' });
+    // =====================================
+    // Memoized Values
+    // =====================================
+    const isFormValid = useMemo(() => {
+        return Object.keys(validateForm(formState.data)).length === 0;
+    }, [formState.data]);
 
-    try {
-      await apiClient.sendContactForm(formData);
+    const characterCount = useMemo(() => {
+        return formState.data.message.length;
+    }, [formState.data.message]);
 
-      setStatus({
-        type: 'success',
-        message: 'Cảm ơn bạn đã liên hệ! Tôi sẽ phản hồi trong vòng 24 giờ.',
-      });
+    const isFormDirty = useMemo(() => {
+        return JSON.stringify(formState.data) !== JSON.stringify(INITIAL_FORM_DATA);
+    }, [formState.data]);
 
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-        agreement: false,
-      });
+    // =====================================
+    // Event Handlers
+    // =====================================
+    const handleFieldChange = useCallback((
+        field: keyof ContactForm,
+        value: FormFieldValue
+    ) => {
+        dispatch({ type: 'SET_FIELD', field, value });
 
-    } catch (error) {
-      console.error('Contact form submission error:', error);
-      setStatus({
-        type: 'error',
-        message: 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau.',
-      });
-    }
-  };
+        // Real-time validation for better UX
+        if (formState.submitAttempted) {
+            const error = validateField(field, value);
+            if (error !== formState.errors[field]) {
+                dispatch({
+                    type: 'SET_ERRORS',
+                    errors: { ...formState.errors, [field]: error }
+                });
+            }
+        }
+    }, [formState.submitAttempted, formState.errors]);
 
-  const renderStatus = () => {
-    if (status.type === 'idle') return null;
+    const handleInputChange = useCallback((
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { name, value, type } = e.target;
+        const fieldValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
 
-    const icons = {
-      loading: <Loader2 className="h-5 w-5 animate-spin" />,
-      success: <CheckCircle className="h-5 w-5" />,
-      error: <AlertCircle className="h-5 w-5" />,
+        handleFieldChange(name as keyof ContactForm, fieldValue);
+    }, [handleFieldChange]);
+
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        dispatch({ type: 'SET_SUBMIT_ATTEMPTED', attempted: true });
+
+        const errors = validateForm(formState.data);
+
+        if (Object.keys(errors).length > 0) {
+            dispatch({ type: 'SET_ERRORS', errors });
+            setStatus({
+                type: 'error',
+                message: Object.values(errors).join('. '),
+            });
+
+            // Focus first error field for accessibility
+            const firstErrorField = Object.keys(errors)[0];
+            const element = formRef.current?.querySelector(`[name="${firstErrorField}"]`) as HTMLElement;
+            element?.focus();
+
+            return;
+        }
+
+        dispatch({ type: 'SET_SUBMITTING', isSubmitting: true });
+        setStatus({ type: 'loading' });
+
+        try {
+            await apiClient.sendContactForm(formState.data);
+
+            setStatus({
+                type: 'success',
+                message: 'Cảm ơn bạn đã liên hệ! Tôi sẽ phản hồi trong vòng 24 giờ.',
+            });
+
+            dispatch({ type: 'RESET_FORM' });
+            onSubmitSuccess?.(formState.data);
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau.';
+
+            console.error('Contact form submission error:', error);
+            setStatus({
+                type: 'error',
+                message: errorMessage,
+            });
+
+            onSubmitError?.(error instanceof Error ? error : new Error(errorMessage));
+        } finally {
+            dispatch({ type: 'SET_SUBMITTING', isSubmitting: false });
+        }
+    }, [formState.data, onSubmitSuccess, onSubmitError]);
+
+    // =====================================
+    // Render Helpers
+    // =====================================
+    const renderStatus = () => {
+        if (status.type === 'idle') return null;
+
+        const icons = {
+            loading: <Loader2 className="h-4 w-4 animate-spin" />,
+            success: <CheckCircle className="h-4 w-4" />,
+            error: <AlertCircle className="h-4 w-4" />,
+        };
+
+        const badgeVariants = {
+            loading: 'default',
+            success: 'default',
+            error: 'destructive',
+        };
+
+        const colors = {
+            loading: 'bg-blue-50 text-blue-800 border-blue-200',
+            success: 'bg-green-50 text-green-800 border-green-200',
+            error: 'bg-red-50 text-red-800 border-red-200',
+        };
+
+        return (
+            <div
+                className={`p-4 rounded-lg border flex items-start ${colors[status.type]} mb-6`}
+                role="alert"
+                aria-live="polite"
+            >
+                <div className="flex-shrink-0 mr-3 mt-0.5">
+                    {icons[status.type]}
+                </div>
+                <div>
+                    <Badge variant={badgeVariants[status.type] as 'default' | 'destructive'} className="mb-2">
+                        {status.type === 'loading' && 'Đang gửi tin nhắn...'}
+                        {status.type === 'success' && 'Gửi thành công!'}
+                        {status.type === 'error' && 'Có lỗi xảy ra'}
+                    </Badge>
+                    {status.message && (
+                        <p className="text-sm mt-1">{status.message}</p>
+                    )}
+                </div>
+            </div>
+        );
     };
 
-    const colors = {
-      loading: 'bg-blue-50 text-blue-800 border-blue-200',
-      success: 'bg-green-50 text-green-800 border-green-200',
-      error: 'bg-red-50 text-red-800 border-red-200',
-    };
 
+
+    // =====================================
+    // Main Render
+    // =====================================
     return (
-      <div className={`p-4 rounded-lg border flex items-start ${colors[status.type]} mb-6`}>
-        <div className="flex-shrink-0 mr-3 mt-0.5">
-          {icons[status.type]}
-        </div>
-        <div>
-          <p className="font-medium">
-            {status.type === 'loading' && 'Đang gửi tin nhắn...'}
-            {status.type === 'success' && 'Gửi thành công!'}
-            {status.type === 'error' && 'Có lỗi xảy ra'}
-          </p>
-          {status.message && (
-            <p className="text-sm mt-1">{status.message}</p>
-          )}
-        </div>
-      </div>
+        <Card className={className}>
+            <CardHeader>
+                <CardTitle className="text-2xl font-bold">Gửi tin nhắn</CardTitle>
+            </CardHeader>
+            <CardContent>
+                {renderStatus()}
+
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="contact-firstName">
+                                Tên <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                                id="contact-firstName"
+                                name="firstName"
+                                value={formState.data.firstName}
+                                onChange={handleInputChange}
+                                placeholder="Nhập tên của bạn"
+                                disabled={formState.isSubmitting}
+                                className={formState.errors.firstName ? 'border-red-300' : ''}
+                            />
+                            {formState.errors.firstName && (
+                                <p className="text-sm text-red-600">{formState.errors.firstName}</p>
+                            )}
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="contact-lastName">
+                                Họ <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                                id="contact-lastName"
+                                name="lastName"
+                                value={formState.data.lastName}
+                                onChange={handleInputChange}
+                                placeholder="Nhập họ của bạn"
+                                disabled={formState.isSubmitting}
+                                className={formState.errors.lastName ? 'border-red-300' : ''}
+                            />
+                            {formState.errors.lastName && (
+                                <p className="text-sm text-red-600">{formState.errors.lastName}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="contact-email">
+                            Email <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                            id="contact-email"
+                            name="email"
+                            type="email"
+                            value={formState.data.email}
+                            onChange={handleInputChange}
+                            placeholder="your@email.com"
+                            disabled={formState.isSubmitting}
+                            className={formState.errors.email ? 'border-red-300' : ''}
+                        />
+                        {formState.errors.email && (
+                            <p className="text-sm text-red-600">{formState.errors.email}</p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="contact-phone">Số điện thoại</Label>
+                        <Input
+                            id="contact-phone"
+                            name="phone"
+                            type="tel"
+                            value={formState.data.phone}
+                            onChange={handleInputChange}
+                            placeholder="+84 xxx xxx xxx"
+                            disabled={formState.isSubmitting}
+                            className={formState.errors.phone ? 'border-red-300' : ''}
+                        />
+                        {formState.errors.phone && (
+                            <p className="text-sm text-red-600">{formState.errors.phone}</p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="contact-subject">
+                            Chủ đề <span className="text-red-500">*</span>
+                        </Label>
+                        <select
+                            id="contact-subject"
+                            name="subject"
+                            value={formState.data.subject}
+                            onChange={handleInputChange}
+                            disabled={formState.isSubmitting}
+                            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${formState.errors.subject ? 'border-red-300' : 'border-gray-300'
+                                }`}
+                        >
+                            <option value="">Chọn chủ đề</option>
+                            {SUBJECT_OPTIONS.map(option => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                        {formState.errors.subject && (
+                            <p className="text-sm text-red-600">{formState.errors.subject}</p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="contact-message">
+                            Tin nhắn <span className="text-red-500">*</span>
+                        </Label>
+                        <Textarea
+                            id="contact-message"
+                            name="message"
+                            rows={5}
+                            value={formState.data.message}
+                            onChange={handleInputChange}
+                            placeholder="Hãy chia sẻ chi tiết về dự án hoặc ý tưởng của bạn..."
+                            disabled={formState.isSubmitting}
+                            className={formState.errors.message ? 'border-red-300' : ''}
+                            maxLength={FORM_CONSTRAINTS.message?.maxLength}
+                        />
+                        <div className="flex justify-between items-center">
+                            {formState.errors.message && (
+                                <p className="text-sm text-red-600">{formState.errors.message}</p>
+                            )}
+                            <p className="text-sm text-gray-500 ml-auto">
+                                {formState.data.message.length}/{FORM_CONSTRAINTS.message?.maxLength}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-start space-x-2">
+                        <input
+                            id="contact-agreement"
+                            name="agreement"
+                            type="checkbox"
+                            checked={formState.data.agreement}
+                            onChange={handleInputChange}
+                            disabled={formState.isSubmitting}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
+                        />
+                        <Label htmlFor="contact-agreement" className="text-sm">
+                            Tôi đồng ý với{' '}
+                            <a href="/privacy" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
+                                chính sách bảo mật
+                            </a>{' '}
+                            và{' '}
+                            <a href="/terms" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
+                                điều khoản sử dụng
+                            </a>
+                            {' '}<span className="text-red-500">*</span>
+                        </Label>
+                    </div>
+                    {formState.errors.agreement && (
+                        <p className="text-sm text-red-600">{formState.errors.agreement}</p>
+                    )}
+
+                    <Button
+                        type="submit"
+                        disabled={formState.isSubmitting}
+                        className="w-full"
+                    >
+                        {formState.isSubmitting ? (
+                            <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                Đang gửi...
+                            </>
+                        ) : (
+                            <>
+                                <Send className="h-4 w-4 mr-2" />
+                                Gửi tin nhắn
+                            </>
+                        )}
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
     );
-  };
-
-  return (
-    <div className={className}>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Gửi tin nhắn</h2>
-
-      {renderStatus()}
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-              Tên *
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-              disabled={status.type === 'loading'}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-              placeholder="Nhập tên của bạn"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-              Họ *
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-              disabled={status.type === 'loading'}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-              placeholder="Nhập họ của bạn"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email *
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            disabled={status.type === 'loading'}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-            placeholder="your@email.com"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-            Số điện thoại
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            disabled={status.type === 'loading'}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-            placeholder="+84 xxx xxx xxx"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-            Chủ đề *
-          </label>
-          <select
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleInputChange}
-            required
-            disabled={status.type === 'loading'}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
-          >
-            <option value="">Chọn chủ đề</option>
-            <option value="project">Thảo luận dự án</option>
-            <option value="collaboration">Hợp tác</option>
-            <option value="job">Cơ hội việc làm</option>
-            <option value="consultation">Tư vấn kỹ thuật</option>
-            <option value="other">Khác</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-            Tin nhắn *
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={5}
-            value={formData.message}
-            onChange={handleInputChange}
-            required
-            disabled={status.type === 'loading'}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-50 disabled:cursor-not-allowed"
-            placeholder="Hãy chia sẻ chi tiết về dự án hoặc ý tưởng của bạn..."
-          />
-          <div className="text-right text-sm text-gray-500 mt-1">
-            {formData.message.length}/1000
-          </div>
-        </div>
-
-        <div className="flex items-center">
-          <input
-            id="agreement"
-            name="agreement"
-            type="checkbox"
-            checked={formData.agreement}
-            onChange={handleInputChange}
-            required
-            disabled={status.type === 'loading'}
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:cursor-not-allowed"
-          />
-          <label htmlFor="agreement" className="ml-2 block text-sm text-gray-700">
-            Tôi đồng ý với{" "}
-            <a href="/privacy" className="text-blue-600 hover:text-blue-800" target="_blank">
-              chính sách bảo mật
-            </a>{" "}
-            và{" "}
-            <a href="/terms" className="text-blue-600 hover:text-blue-800" target="_blank">
-              điều khoản sử dụng
-            </a>
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          disabled={status.type === 'loading'}
-          className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          {status.type === 'loading' ? (
-            <>
-              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-              Đang gửi...
-            </>
-          ) : (
-            <>
-              <Send className="h-5 w-5 mr-2" />
-              Gửi tin nhắn
-            </>
-          )}
-        </button>
-      </form>
-    </div>
-  );
 }

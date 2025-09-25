@@ -8,58 +8,58 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
-	const { isAuthenticated, isLoading } = useAuth();
-	const router = useRouter();
-	const pathname = usePathname();
+    const { isAuthenticated, isLoading } = useAuth();
+    const router = useRouter();
+    const pathname = usePathname();
 
-	const isLoginPage = pathname === '/admin/login';
+    const isLoginPage = pathname === '/admin/login';
 
-	useEffect(() => {
-		if (!isLoading && !isAuthenticated && !isLoginPage) {
-			router.push(`/admin/login?redirect=${encodeURIComponent(pathname)}`);
-		}
-	}, [isAuthenticated, isLoading, isLoginPage, router, pathname]);
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated && !isLoginPage) {
+            router.push(`/admin/login?redirect=${encodeURIComponent(pathname)}`);
+        }
+    }, [isAuthenticated, isLoading, isLoginPage, router, pathname]);
 
-	// Show loading spinner while checking authentication
-	if (isLoading) {
-		return (
-			<div className='min-h-screen flex items-center justify-center bg-gray-50'>
-				<div className='flex flex-col items-center space-y-4'>
-					<Loader2 className='h-8 w-8 animate-spin text-blue-600' />
-					<p className='text-gray-600'>Đang tải...</p>
-				</div>
-			</div>
-		);
-	}
+    // Show loading spinner while checking authentication
+    if (isLoading) {
+        return (
+            <div className='min-h-screen flex items-center justify-center bg-gray-50'>
+                <div className='flex flex-col items-center space-y-4'>
+                    <Loader2 className='h-8 w-8 animate-spin text-blue-600' />
+                    <p className='text-gray-600'>Đang tải...</p>
+                </div>
+            </div>
+        );
+    }
 
-	// Render login page without admin layout
-	if (isLoginPage) {
-		return <>{children}</>;
-	}
+    // Render login page without admin layout
+    if (isLoginPage) {
+        return <>{children}</>;
+    }
 
-	// Redirect to login if not authenticated
-	if (!isAuthenticated) {
-		return null; // Will redirect in useEffect
-	}
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+        return null; // Will redirect in useEffect
+    }
 
-	// Render admin layout for authenticated users
-	return (
-		<div className='min-h-screen bg-gray-50'>
-			<AdminSidebar />
-			<div className='lg:ml-64'>
-				<AdminHeader />
-				<main className='py-6'>
-					<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>{children}</div>
-				</main>
-			</div>
-		</div>
-	);
+    // Render admin layout for authenticated users
+    return (
+        <div className='min-h-screen bg-gray-50'>
+            <AdminSidebar />
+            <div className='lg:ml-64'>
+                <AdminHeader />
+                <main className='py-6'>
+                    <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>{children}</div>
+                </main>
+            </div>
+        </div>
+    );
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-	return (
-		<AuthProvider>
-			<AdminLayoutContent>{children}</AdminLayoutContent>
-		</AuthProvider>
-	);
+    return (
+        <AuthProvider>
+            <AdminLayoutContent>{children}</AdminLayoutContent>
+        </AuthProvider>
+    );
 }
