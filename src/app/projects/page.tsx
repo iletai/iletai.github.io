@@ -1,9 +1,12 @@
 import AnimatedCard from '@/components/motion/AnimatedCard';
 import FadeInSection from '@/components/motion/FadeInSection';
+import AnimatedGradientText from '@/components/ui/animated-gradient-text';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import MagicBackground from '@/components/ui/magic-background';
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 // Temporary static data - will be replaced with API calls
@@ -14,7 +17,7 @@ const projects = [
         description: "Full-stack e-commerce solution với React, Node.js và MongoDB. Hỗ trợ thanh toán Stripe, quản lý inventory và user authentication.",
         longDescription: "Một nền tảng thương mại điện tử hoàn chỉnh được xây dựng với React cho frontend và Node.js cho backend. Ứng dụng hỗ trợ đầy đủ các tính năng từ quản lý sản phẩm, giỏ hàng, thanh toán đến quản lý đơn hàng.",
         technologies: ["React", "Node.js", "MongoDB", "Stripe", "Express", "JWT"],
-        image: "/images/projects/ecommerce.jpg",
+        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center",
         liveUrl: "https://example.com",
         githubUrl: "https://github.com/example",
         featured: true,
@@ -26,7 +29,7 @@ const projects = [
         description: "Ứng dụng quản lý công việc với real-time collaboration sử dụng WebSocket và Prisma ORM.",
         longDescription: "Ứng dụng quản lý tác vụ hiện đại với khả năng cộng tác theo thời gian thực. Người dùng có thể tạo project, assign tasks, track progress và communicate với team members.",
         technologies: ["Next.js", "TypeScript", "Prisma", "WebSocket", "PostgreSQL"],
-        image: "/images/projects/taskapp.jpg",
+        image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center",
         liveUrl: "https://example.com",
         githubUrl: "https://github.com/example",
         featured: true,
@@ -38,7 +41,7 @@ const projects = [
         description: "Dashboard hiển thị thông tin thời tiết với charts và forecasting sử dụng OpenWeather API.",
         longDescription: "Dashboard thời tiết với giao diện đẹp mắt, hiển thị thông tin thời tiết hiện tại và dự báo 7 ngày. Tích hợp charts để visualize temperature trends và precipitation data.",
         technologies: ["React", "TypeScript", "Chart.js", "OpenWeather API"],
-        image: "/images/projects/weather.jpg",
+        image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop&crop=center",
         liveUrl: "https://example.com",
         githubUrl: "https://github.com/example",
         featured: false,
@@ -50,7 +53,7 @@ const projects = [
         description: "RESTful API cho blog platform với authentication, CRUD operations và file upload.",
         longDescription: "RESTful API được xây dựng với Node.js và Express, cung cấp đầy đủ endpoints cho blog platform. Hỗ trợ user authentication, CRUD operations cho posts và comments, file upload cho images.",
         technologies: ["Node.js", "Express", "MongoDB", "JWT", "Multer"],
-        image: "/images/projects/blogapi.jpg",
+        image: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&h=600&fit=crop&crop=center",
         githubUrl: "https://github.com/example",
         featured: false,
         category: "backend",
@@ -66,7 +69,7 @@ const categories = [
 
 export default function ProjectsPage() {
     return (
-        <div className="min-h-screen py-12">
+        <MagicBackground variant="combined" intensity="medium" className="min-h-screen py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <FadeInSection className="mb-12">
@@ -77,7 +80,11 @@ export default function ProjectsPage() {
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Về trang chủ
                     </Link>
-                    <h1 className="text-4xl font-bold mb-4">Dự án của tôi</h1>
+                    <h1 className="text-4xl font-bold mb-4">
+                        <AnimatedGradientText className="text-4xl font-bold">
+                            Dự án của tôi
+                        </AnimatedGradientText>
+                    </h1>
                     <p className="text-lg text-muted-foreground max-w-3xl">
                         Tổng hợp các dự án mà tôi đã thực hiện, từ ứng dụng web full-stack đến
                         các API backend và frontend components. Mỗi dự án đều được build với
@@ -104,9 +111,15 @@ export default function ProjectsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project, index) => (
                         <AnimatedCard key={project.id} className="h-full flex flex-col" index={index}>
-                            {/* Project Image Placeholder */}
-                            <div className="h-48 bg-gray-200 flex items-center justify-center rounded-t-lg">
-                                <span className="text-gray-500">Project Image</span>
+                            {/* Project Image */}
+                            <div className="h-48 relative overflow-hidden rounded-t-lg">
+                                <Image
+                                    src={project.image}
+                                    alt={project.title}
+                                    fill
+                                    className="object-cover transition-transform duration-300 hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
                             </div>
 
                             <CardHeader>
@@ -193,6 +206,6 @@ export default function ProjectsPage() {
                     </Button>
                 </FadeInSection>
             </div>
-        </div>
+        </MagicBackground>
     );
 }

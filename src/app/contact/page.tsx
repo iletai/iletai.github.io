@@ -2,13 +2,15 @@ import ContactForm from "@/components/forms/ContactForm";
 import FadeInSection from "@/components/motion/FadeInSection";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import MagicBackground from "@/components/ui/magic-background";
 import { ArrowLeft, GithubIcon, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import Link from "next/link";
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <MagicBackground variant="grid" intensity="medium">
+            <div className="min-h-screen py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <FadeInSection>
                     <div className="mb-12">
@@ -179,5 +181,6 @@ export default function ContactPage() {
                 </div>
             </div>
         </div>
+        </MagicBackground>
     );
 }

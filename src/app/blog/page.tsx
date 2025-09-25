@@ -1,3 +1,4 @@
+import MagicBackground from "@/components/ui/magic-background";
 import { calculateReadingTime, formatDate } from "@/lib/utils";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import Link from "next/link";
@@ -64,8 +65,9 @@ const allTags = [...new Set(blogPosts.flatMap(post => post.tags))];
 
 export default function BlogPage() {
     return (
-        <div className="min-h-screen py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <MagicBackground variant="dots" intensity="medium">
+            <div className="min-h-screen py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <div className="mb-12">
                     <Link
@@ -222,5 +224,6 @@ export default function BlogPage() {
                 </div>
             </div>
         </div>
+        </MagicBackground>
     );
 }

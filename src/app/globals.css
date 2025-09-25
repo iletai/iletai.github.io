@@ -120,3 +120,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Magic UI Animations */
+@keyframes gradient {
+  to {
+    background-position: 300% 0;
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+@keyframes background-position-spin {
+  0% {
+    background-position: top center;
+  }
+  100% {
+    background-position: bottom center;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 8s linear infinite;
+}
+
+.animate-rainbow {
+  animation: rainbow 2s infinite linear;
+}
+
+.animate-background-position-spin {
+  animation: background-position-spin 3000ms infinite alternate;
+}

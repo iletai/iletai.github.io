@@ -1,3 +1,4 @@
+import HydrationFix from "@/components/HydrationFix";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import PageTransition from "@/components/motion/PageTransition";
@@ -42,7 +43,8 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="vi" className={inter.variable}>
-            <body className="font-inter antialiased bg-white">
+            <body className="font-inter antialiased bg-white" suppressHydrationWarning={true}>
+                <HydrationFix />
                 <Header />
                 <PageTransition>
                     <main className="min-h-screen pt-16">
