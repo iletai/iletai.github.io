@@ -3,7 +3,7 @@ import { blogService } from "@/lib/api/blog";
 import { ApiError } from "@/lib/api/client";
 import type { BlogPost } from "@/lib/api/types";
 import { calculateReadingTime, formatDate } from "@/lib/utils";
-import { AlertCircle, ArrowLeft, Calendar, Clock } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import Link from "next/link";
 
 interface BlogPageData {
@@ -20,7 +20,7 @@ async function fetchBlogPageData(): Promise<BlogPageData> {
         const postsData = response?.data?.posts;
 
         if (!Array.isArray(postsData)) {
-            throw new Error("Dữ liệu blog trả về không hợp lệ.");
+            throw new Error("Invalid blog data returned from API.");
         }
 
         const posts = postsData.filter((post): post is BlogPost =>
@@ -35,7 +35,7 @@ async function fetchBlogPageData(): Promise<BlogPageData> {
             error: null,
         };
     } catch (error) {
-        const message = error instanceof ApiError ? error.message : "Không thể tải danh sách bài viết. Vui lòng thử lại sau.";
+        const message = error instanceof ApiError ? error.message : "Unable to load blog posts. Please try again later.";
 
         return {
             posts: [],
@@ -56,55 +56,32 @@ export default async function BlogPage() {
 
     return (
         <MagicBackground variant="dots" intensity="medium">
-            <div className="min-h-screen py-12">
+            <div className="min-h-screen pt-32 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-12">
-                        <Link
-                            href="/"
-                            className="text-blue-600 hover:text-blue-800 inline-flex items-center mb-6"
-                        >
-                            <ArrowLeft className="h-4 w-4 mr-2" />
-                            Về trang chủ
-                        </Link>
-
-                        {/* API Status Notice */}
-                        {error ? (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg" role="alert">
-                                <div className="flex items-center">
-                                    <AlertCircle className="h-5 w-5 text-red-600 mr-2" aria-hidden="true" />
-                                    <span className="text-red-800 font-medium">Không thể tải dữ liệu blog</span>
-                                </div>
-                                <p className="text-red-700 text-sm mt-1">
-                                    {error}
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg" role="status">
-                                <div className="flex items-center">
-                                    <AlertCircle className="h-5 w-5 text-green-600 mr-2" aria-hidden="true" />
-                                    <span className="text-green-800 font-medium">Đang hiển thị dữ liệu trực tiếp từ API blog</span>
-                                </div>
-                                <p className="text-green-700 text-sm mt-1">
-                                    Cập nhật mới nhất được đồng bộ từ hệ thống nội dung.
-                                </p>
-                            </div>
-                        )}
-
                         <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
                         <p className="text-lg text-gray-600 max-w-3xl">
-                            Chia sẻ kiến thức, kinh nghiệm và insights về lập trình, công nghệ web và
-                            software development. Từ tutorials cơ bản đến advanced concepts.
+                            Sharing knowledge, experience, and insights about programming, web technologies, and
+                            software development. From basic tutorials to advanced concepts.
                         </p>
                     </div>
+
+                    {/* Error State */}
+                    {error && (
+                        <div className="mb-8 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+                            <p className="font-medium">Error loading blog posts:</p>
+                            <p className="mt-1 text-sm">{error}</p>
+                        </div>
+                    )}
 
                     {/* Tags Filter */}
                     {allTags.length > 0 && (
                         <div className="mb-8">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-3">Lọc theo tag:</h3>
+                            <h3 className="text-sm font-semibold text-gray-900 mb-3">Filter by tag:</h3>
                             <div className="flex flex-wrap gap-2">
                                 <button className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700 transition-colors">
-                                    Tất cả
+                                    All
                                 </button>
                                 {allTags.map((tag) => (
                                     <button
@@ -121,7 +98,7 @@ export default async function BlogPage() {
                     {/* Featured Posts */}
                     {featuredPosts.length > 0 && (
                         <div className="mb-12">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Bài viết nổi bật</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Posts</h2>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {featuredPosts.map((post) => (
                                     <article
@@ -171,7 +148,7 @@ export default async function BlogPage() {
                                                 </div>
                                                 <div className="flex items-center">
                                                     <Clock className="h-4 w-4 mr-1" />
-                                                    {(post.readingTime ?? calculateReadingTime(post.content))} phút đọc
+                                                    {(post.readingTime ?? calculateReadingTime(post.content))} min read
                                                 </div>
                                             </div>
                                         </div>
@@ -183,7 +160,7 @@ export default async function BlogPage() {
 
                     {/* All Posts */}
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Tất cả bài viết</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">All Posts</h2>
                         <div className="space-y-6">
                             {posts.map((post) => (
                                 <article
@@ -210,7 +187,7 @@ export default async function BlogPage() {
                                             </div>
                                             <div className="flex items-center">
                                                 <Clock className="h-4 w-4 mr-1" />
-                                                {(post.readingTime ?? calculateReadingTime(post.content))} phút đọc
+                                                {(post.readingTime ?? calculateReadingTime(post.content))} min read
                                             </div>
                                         </div>
                                     </div>
@@ -229,7 +206,7 @@ export default async function BlogPage() {
                             ))}
                             {posts.length === 0 && !error && (
                                 <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-600">
-                                    Hiện chưa có bài viết nào được xuất bản. Vui lòng quay lại sau.
+                                    No published posts available yet. Please check back later.
                                 </div>
                             )}
                         </div>
@@ -242,8 +219,8 @@ export default async function BlogPage() {
                                 <button
                                     key={pageNumber}
                                     className={`px-3 py-2 rounded transition-colors ${pageNumber === page
-                                            ? "bg-blue-600 text-white hover:bg-blue-700"
-                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                         }`}
                                     type="button"
                                     aria-current={pageNumber === page ? "page" : undefined}

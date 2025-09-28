@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: 'Token không hợp lệ',
+                    message: 'Invalid token',
                 },
                 { status: 401 }
             );
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: 'Token đã hết hạn hoặc không hợp lệ',
+                    message: 'Token expired or invalid',
                 },
                 { status: 401 }
             );
@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(
             {
                 success: false,
-                message: 'Lỗi server',
+                message: 'Server error',
             },
             { status: 500 }
         );

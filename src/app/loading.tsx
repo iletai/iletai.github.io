@@ -9,11 +9,11 @@ export default function Loading() {
                 </div>
 
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                    Đang tải...
+                    Loading...
                 </h2>
 
                 <p className="text-gray-600">
-                    Vui lòng đợi một chút
+                    Please wait a moment
                 </p>
 
                 {/* Progress bar animation */}

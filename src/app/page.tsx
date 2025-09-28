@@ -10,55 +10,112 @@ import { AppleCardsCarousel } from "@/components/ui/apple-cards-carousel";
 import { CardStack, ExpandableCardStack } from "@/components/ui/card-stack";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { MagicNewsletter } from "@/components/ui/magic-newsletter";
-import { ArrowRight, Code, ExternalLink, Github, Palette, Rocket } from "lucide-react";
+import { blogService, projectsService } from "@/lib/api";
+import type { BlogPost, Project } from "@/lib/api/types";
+import { ArrowRight, Code, ExternalLink, Github, Palette, Rocket, Smartphone } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-// Temporary static data - will be replaced with API calls
-const featuredProjects = [
-    {
-        id: "1",
-        title: "E-commerce Platform",
-        description: "Full-stack e-commerce solution với React, Node.js và MongoDB",
-        technologies: ["React", "Node.js", "MongoDB", "Stripe"],
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center",
-        liveUrl: "https://example.com",
-        githubUrl: "https://github.com/example",
-    },
-    {
-        id: "2",
-        title: "Task Management App",
-        description: "Ứng dụng quản lý công việc với real-time collaboration",
-        technologies: ["Next.js", "TypeScript", "Prisma", "WebSocket"],
-        image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center",
-        liveUrl: "https://example.com",
-        githubUrl: "https://github.com/example",
-    },
-];
+export const metadata: Metadata = {
+    title: "Le Quang Trong Tai - Full Stack Developer",
+    description: "Specialized in developing modern web applications with React, Next.js and TypeScript. Passionate about creating valuable products and exceptional user experiences.",
+};
 
-const recentPosts = [
-    {
-        slug: "getting-started-nextjs-15",
-        title: "Getting Started with Next.js 15",
-        excerpt: "Hướng dẫn chi tiết về những tính năng mới trong Next.js 15",
-        publishedAt: "2024-01-15",
-        readingTime: 5,
-    },
-    {
-        slug: "react-server-components",
-        title: "Understanding React Server Components",
-        excerpt: "Deep dive vào React Server Components và cách sử dụng hiệu quả",
-        publishedAt: "2024-01-10",
-        readingTime: 8,
-    },
-];
+// Data fetching functions
+async function getFeaturedProjects(): Promise<Project[]> {
+    try {
+        const response = await projectsService.getFeaturedProjects(2);
+        return response.data || [];
+    } catch (error) {
+        console.error('Failed to fetch featured projects:', error);
+        // Fallback data for development
+        return [
+            {
+                id: "1",
+                title: "E-commerce Platform",
+                description: "Full-stack e-commerce solution with React, Node.js and MongoDB",
+                longDescription: "A comprehensive e-commerce platform built with modern technologies",
+                technologies: ["React", "Node.js", "MongoDB", "Stripe"],
+                image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center",
+                liveUrl: "https://example.com",
+                githubUrl: "https://github.com/example",
+                featured: true,
+                category: "Web Development",
+                status: "completed",
+                createdAt: "2024-01-15",
+                updatedAt: "2024-01-15"
+            },
+            {
+                id: "2",
+                title: "Task Management App",
+                description: "Task management application with real-time collaboration",
+                longDescription: "A collaborative task management application with real-time features",
+                technologies: ["Next.js", "TypeScript", "Prisma", "WebSocket"],
+                image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center",
+                liveUrl: "https://example.com",
+                githubUrl: "https://github.com/example",
+                featured: true,
+                category: "Web Development",
+                status: "completed",
+                createdAt: "2024-01-10",
+                updatedAt: "2024-01-10"
+            }
+        ];
+    }
+}
+
+async function getRecentBlogPosts(): Promise<BlogPost[]> {
+    try {
+        const response = await blogService.getBlogPosts({
+            status: "published",
+            limit: 2
+        });
+        return response.data?.posts || [];
+    } catch (error) {
+        console.error('Failed to fetch recent blog posts:', error);
+        // Fallback data for development
+        return [
+            {
+                id: "1",
+                slug: "getting-started-nextjs-15",
+                title: "Getting Started with Next.js 15",
+                excerpt: "Detailed guide to new features in Next.js 15",
+                content: "Content here...",
+                publishedAt: "2024-01-15",
+                updatedAt: "2024-01-15",
+                featured: false,
+                readingTime: 5,
+                status: "published",
+                author: { id: "1", name: "Le Quang Trong Tai" },
+                category: { id: "1", name: "Next.js", slug: "nextjs" },
+                tags: [{ id: "1", name: "Next.js", slug: "nextjs" }]
+            },
+            {
+                id: "2",
+                slug: "react-server-components",
+                title: "Understanding React Server Components",
+                excerpt: "Deep dive into React Server Components and effective usage",
+                content: "Content here...",
+                publishedAt: "2024-01-10",
+                updatedAt: "2024-01-10",
+                featured: false,
+                readingTime: 8,
+                status: "published",
+                author: { id: "1", name: "Le Quang Trong Tai" },
+                category: { id: "2", name: "React", slug: "react" },
+                tags: [{ id: "2", name: "React", slug: "react" }]
+            }
+        ];
+    }
+}
 
 // Sample data for new components
 const skillsData = [
     {
         id: "1",
         title: "Frontend Development",
-        description: "Chuyên gia phát triển giao diện người dùng với React, Next.js, TypeScript và Tailwind CSS. Tạo nên những trải nghiệm web tương tác mượt mà, hiện đại với hiệu suất cao và SEO tối ưu. Từ component design system đến performance optimization, mọi chi tiết đều được chăm chút tỉ mỉ để mang lại trải nghiệm tuyệt vời nhất cho người dùng.",
+        description: "Expert in user interface development with React, Next.js, TypeScript, and Tailwind CSS. Creating smooth, modern interactive web experiences with high performance and optimized SEO. From component design systems to performance optimization, every detail is carefully crafted to deliver the best user experience.",
         icon: <Code className="w-6 h-6" />,
         color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center",
@@ -66,7 +123,7 @@ const skillsData = [
     {
         id: "2",
         title: "UI/UX Design",
-        description: "Thiết kế trải nghiệm người dùng đẳng cấp với Figma, Adobe XD và Framer. Từ research insights đến wireframing, prototyping và visual design - mọi bước đều hướng tới việc tạo ra những sản phẩm không chỉ đẹp mắt mà còn giải quyết được vấn đề thực tế. Accessibility, usability và emotional design là những yếu tố không thể thiếu.",
+        description: "Designing world-class user experiences with Figma, Adobe XD, and Framer. From research insights to wireframing, prototyping, and visual design - every step aims to create products that are not only beautiful but also solve real problems. Accessibility, usability, and emotional design are essential elements.",
         icon: <Palette className="w-6 h-6" />,
         color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
         image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop&crop=center",
@@ -74,52 +131,65 @@ const skillsData = [
     {
         id: "3",
         title: "Backend Development",
-        description: "Xây dựng hệ thống backend mạnh mẽ với Node.js, Python, và các database hiện đại. Từ RESTful API design đến microservices architecture, GraphQL integration và cloud deployment. Bảo mật, scalability và monitoring là những ưu tiên hàng đầu trong mọi dự án, đảm bảo hệ thống hoạt động ổn định 24/7.",
+        description: "Building robust backend systems with Node.js, Python, and modern databases. From RESTful API design to microservices architecture, GraphQL integration, and cloud deployment. Security, scalability, and monitoring are top priorities in every project, ensuring systems run reliably 24/7.",
         icon: <Rocket className="w-6 h-6" />,
         color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
         image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=300&fit=crop&crop=center",
+    },
+    {
+        id: "4",
+        title: "iOS Development",
+        description: "Creating native iOS applications with SwiftUI and Swift. Building intuitive, performant mobile experiences that leverage iOS-specific features and design guidelines. From Core Data integration to push notifications, App Store optimization, and seamless user interfaces that follow Apple's Human Interface Guidelines.",
+        icon: <Smartphone className="w-6 h-6" />,
+        color: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%)",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop&crop=center",
     },
 ];
 
 const testimonialsData = [
     {
         id: "1",
-        quote: "Làm việc cùng anh ấy là một trải nghiệm tuyệt vời. Code rất clean và delivery đúng thời gian.",
-        name: "Nguyễn Văn A",
-        title: "Product Manager tại TechCorp",
+        quote: "Working with him is an amazing experience. Clean code and on-time delivery.",
+        name: "John Anderson",
+        title: "Product Manager at TechCorp",
         rating: 5,
     },
     {
         id: "2",
-        quote: "Kỹ năng frontend xuất sắc, hiểu rõ về UX/UI và luôn đưa ra những giải pháp sáng tạo.",
-        name: "Trần Thị B",
-        title: "Senior Designer tại StartupXYZ",
+        quote: "Excellent frontend skills, deep understanding of UX/UI and always provides creative solutions.",
+        name: "Sarah Wilson",
+        title: "Senior Designer at StartupXYZ",
         rating: 5,
     },
     {
         id: "3",
-        quote: "Professional, reliable và có khả năng học hỏi rất nhanh. Highly recommended!",
-        name: "John Smith",
-        title: "CTO tại GlobalTech",
+        quote: "Professional, reliable, and learns incredibly fast. Highly recommended!",
+        name: "Michael Chen",
+        title: "CTO at GlobalTech",
         rating: 5,
     },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+    const [featuredProjects, recentPosts] = await Promise.all([
+        getFeaturedProjects(),
+        getRecentBlogPosts()
+    ]);
+
     return (
         <MagicBackground variant="combined" intensity="high">
             <div className="min-h-screen">
                 {/* Hero Section */}
-                <section className="py-20 px-4 sm:px-6 lg:px-8">
+                <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto">
                         <FadeInSection>
                             <div className="text-center">
                                 <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white mb-6">
                                     <TextAnimate animationType="word" animation="slideUp">
-                                        Xin chào, tôi là
+                                        Hello, I&apos;m
                                     </TextAnimate>{" "}
                                     <AnimatedGradientText className="text-4xl sm:text-6xl font-bold">
-                                        LÊ QUANG TRỌNG TÀI
+                                        LE QUANG TRONG TAI
                                     </AnimatedGradientText>
                                 </h1>
                                 <TypingAnimation
@@ -127,19 +197,19 @@ export default function HomePage() {
                                     duration={50}
                                     startDelay={1000}
                                 >
-                                    Chuyên phát triển ứng dụng web hiện đại với React, Next.js và TypeScript.
-                                    Đam mê tạo ra những sản phẩm có giá trị và trải nghiệm người dùng tuyệt vời.
+                                    Specialized in developing modern web applications with React, Next.js and TypeScript.
+                                    Passionate about creating valuable products and exceptional user experiences.
                                 </TypingAnimation>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
                                         <Link href="/projects">
-                                            Xem dự án
+                                            View Projects
                                             <ArrowRight className="ml-2 h-5 w-5" />
                                         </Link>
                                     </Button>
                                     <Button asChild variant="outline" size="lg">
                                         <Link href="/contact">
-                                            Liên hệ
+                                            Contact
                                         </Link>
                                     </Button>
                                 </div>
@@ -153,9 +223,9 @@ export default function HomePage() {
                     <div className="max-w-7xl mx-auto">
                         <FadeInSection>
                             <div className="text-center mb-12">
-                                <h2 className="text-3xl font-bold text-gray-900 mb-4">Dự án nổi bật</h2>
-                                <p className="text-lg text-gray-600">
-                                    Một số dự án gần đây mà tôi đã thực hiện
+                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Featured Projects</h2>
+                                <p className="text-lg text-gray-600 dark:text-gray-300">
+                                    Some recent projects I have worked on
                                 </p>
                             </div>
                         </FadeInSection>
@@ -165,7 +235,7 @@ export default function HomePage() {
                                 <AnimatedCard key={project.id} index={index}>
                                     <div className="relative h-48 overflow-hidden rounded-t-lg">
                                         <Image
-                                            src={project.image}
+                                            src={project.image || "/api/placeholder/800/600"}
                                             alt={project.title}
                                             fill
                                             className="object-cover hover:scale-105 transition-transform duration-300"
@@ -220,7 +290,7 @@ export default function HomePage() {
                             <div className="text-center">
                                 <Button variant="link" asChild className="text-blue-600 hover:text-blue-800 font-semibold">
                                     <Link href="/projects">
-                                        Xem tất cả dự án
+                                        View All Projects
                                         <ArrowRight className="ml-2 h-5 w-5" />
                                     </Link>
                                 </Button>
@@ -239,10 +309,10 @@ export default function HomePage() {
                                     animation="slideUp"
                                     className="text-3xl font-bold mb-4"
                                 >
-                                    Dự án nổi bật
+                                    Featured Projects
                                 </TextAnimate>
                                 <p className="text-lg text-gray-300">
-                                    Khám phá những dự án được tôi thực hiện với công nghệ hiện đại
+                                    Explore projects I&apos;ve built with modern technologies
                                 </p>
                             </div>
                         </FadeInSection>
@@ -264,10 +334,10 @@ export default function HomePage() {
                         <FadeInSection>
                             <div className="text-center mb-12">
                                 <AnimatedGradientText className="text-3xl font-bold mb-4">
-                                    Kỹ năng chuyên môn
+                                    Professional Skills
                                 </AnimatedGradientText>
                                 <p className="text-lg text-gray-600 dark:text-gray-300">
-                                    Những công nghệ và kỹ năng tôi sử dụng hàng ngày
+                                    Technologies and skills I use daily
                                 </p>
                             </div>
                         </FadeInSection>
@@ -295,10 +365,10 @@ export default function HomePage() {
                                     animation="blurIn"
                                     className="text-3xl font-bold text-gray-900 dark:text-white mb-4"
                                 >
-                                    Khách hàng nói gì
+                                    What Clients Say
                                 </TextAnimate>
                                 <p className="text-lg text-gray-600 dark:text-gray-300">
-                                    Phản hồi từ những người đã làm việc cùng tôi
+                                    Feedback from those who have worked with me
                                 </p>
                             </div>
                         </FadeInSection>
@@ -329,9 +399,9 @@ export default function HomePage() {
                     <div className="max-w-7xl mx-auto">
                         <FadeInSection>
                             <div className="text-center mb-12">
-                                <h2 className="text-3xl font-bold text-gray-900 mb-4">Blog gần đây</h2>
-                                <p className="text-lg text-gray-600">
-                                    Chia sẻ kiến thức và kinh nghiệm lập trình
+                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Recent Blog Posts</h2>
+                                <p className="text-lg text-gray-600 dark:text-gray-300">
+                                    Sharing programming knowledge and experience
                                 </p>
                             </div>
                         </FadeInSection>
@@ -353,9 +423,9 @@ export default function HomePage() {
                                         <p className="text-gray-600 mb-4">{post.excerpt}</p>
                                         <div className="flex justify-between text-sm text-gray-500">
                                             <time dateTime={post.publishedAt}>
-                                                {new Date(post.publishedAt).toLocaleDateString("vi-VN")}
+                                                {new Date(post.publishedAt).toLocaleDateString("en-US")}
                                             </time>
-                                            <span>{post.readingTime} phút đọc</span>
+                                            <span>{post.readingTime} min read</span>
                                         </div>
                                     </CardContent>
                                 </AnimatedCard>
@@ -366,7 +436,7 @@ export default function HomePage() {
                             <div className="text-center">
                                 <Button variant="link" asChild className="text-blue-600 hover:text-blue-800 font-semibold">
                                     <Link href="/blog">
-                                        Xem tất cả bài viết
+                                        View All Posts
                                         <ArrowRight className="ml-2 h-5 w-5" />
                                     </Link>
                                 </Button>

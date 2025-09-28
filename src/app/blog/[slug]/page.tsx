@@ -1,8 +1,9 @@
+import BackButton from "@/components/ui/back-button";
 import { blogService } from "@/lib/api/blog";
 import { ApiError } from "@/lib/api/client";
 import type { BlogPost } from "@/lib/api/types";
 import { calculateReadingTime, formatDate } from "@/lib/utils";
-import { ArrowLeft, Calendar, Clock, Heart, Share2 } from "lucide-react";
+import { Calendar, Clock, Heart, Share2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -14,7 +15,7 @@ async function loadBlogPost(slug: string): Promise<{ post: BlogPost | null; erro
         if (!post || typeof post.slug !== "string" || typeof post.title !== "string") {
             return {
                 post: null,
-                error: "Dữ liệu bài viết không hợp lệ.",
+                error: "Invalid article data.",
             };
         }
 
@@ -27,7 +28,7 @@ async function loadBlogPost(slug: string): Promise<{ post: BlogPost | null; erro
             return { post: null, error: null };
         }
 
-        const message = error instanceof ApiError ? error.message : "Không thể tải bài viết.";
+        const message = error instanceof ApiError ? error.message : "Unable to load article.";
         return { post: null, error: message };
     }
 }
@@ -51,13 +52,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             return (
                 <div className="min-h-screen py-12">
                     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <Link
-                            href="/blog"
-                            className="text-blue-600 hover:text-blue-800 inline-flex items-center mb-6"
-                        >
-                            <ArrowLeft className="h-4 w-4 mr-2" />
-                            Về trang blog
-                        </Link>
+                        <BackButton href="/blog" />
                         <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-red-700" role="alert">
                             {error}
                         </div>
@@ -80,13 +75,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="min-h-screen py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Back Navigation */}
-                <Link
-                    href="/blog"
-                    className="text-blue-600 hover:text-blue-800 inline-flex items-center mb-8"
-                >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Về trang blog
-                </Link>
+                <BackButton href="/blog" />
 
                 {/* Article Header */}
                 <header className="mb-8">
@@ -111,7 +100,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center text-sm text-gray-500 space-x-6">
-                            <span>Bởi {post.author?.name ?? "Ẩn danh"}</span>
+                            <span>By {post.author?.name ?? "Anonymous"}</span>
                             <div className="flex items-center">
                                 <Calendar className="h-4 w-4 mr-1" />
                                 <time dateTime={post.publishedAt}>
@@ -120,7 +109,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                             </div>
                             <div className="flex items-center">
                                 <Clock className="h-4 w-4 mr-1" />
-                                {readingTime} phút đọc
+                                {readingTime} min read
                             </div>
                         </div>
 
@@ -163,7 +152,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                         <div className="flex items-center space-x-4">
                             <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Chia sẻ bài viết
+                                Share article
                             </button>
                         </div>
                     </div>
@@ -171,7 +160,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                 {/* Related Posts */}
                 <section className="mt-16">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-8">Bài viết liên quan</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {relatedPosts.map((relatedPost) => (
                             <article key={relatedPost.slug} className="bg-white rounded-lg shadow-md p-6">
@@ -196,7 +185,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         ))}
                         {relatedPosts.length === 0 && (
                             <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-sm text-gray-600">
-                                Không có bài viết liên quan để hiển thị.
+                                No related articles to display.
                             </div>
                         )}
                     </div>

@@ -76,11 +76,11 @@ const INITIAL_FORM_DATA: ContactForm = {
 };
 
 const SUBJECT_OPTIONS: { value: string; label: string }[] = [
-    { value: 'project', label: 'Thảo luận dự án' },
-    { value: 'collaboration', label: 'Hợp tác' },
-    { value: 'job', label: 'Cơ hội việc làm' },
-    { value: 'consultation', label: 'Tư vấn kỹ thuật' },
-    { value: 'other', label: 'Khác' },
+    { value: 'project', label: 'Project Discussion' },
+    { value: 'collaboration', label: 'Collaboration' },
+    { value: 'job', label: 'Job Opportunity' },
+    { value: 'consultation', label: 'Technical Consultation' },
+    { value: 'other', label: 'Other' },
 ];
 
 // =====================================
@@ -142,34 +142,34 @@ const validateField = (field: keyof ContactForm, value: FormFieldValue): string 
 const getFieldErrorMessage = (field: keyof ContactForm, type: string, value?: number): string => {
     const messages: Record<string, Record<string, string>> = {
         firstName: {
-            required: 'Tên là bắt buộc',
-            maxLength: `Tên không được vượt quá ${value} ký tự`,
+            required: 'First name is required',
+            maxLength: `First name cannot exceed ${value} characters`,
         },
         lastName: {
-            required: 'Họ là bắt buộc',
-            maxLength: `Họ không được vượt quá ${value} ký tự`,
+            required: 'Last name is required',
+            maxLength: `Last name cannot exceed ${value} characters`,
         },
         email: {
-            required: 'Email là bắt buộc',
-            pattern: 'Email không hợp lệ',
+            required: 'Email is required',
+            pattern: 'Please enter a valid email address',
         },
         phone: {
-            maxLength: `Số điện thoại không được vượt quá ${value} ký tự`,
+            maxLength: `Phone number cannot exceed ${value} characters`,
         },
         subject: {
-            required: 'Chủ đề là bắt buộc',
+            required: 'Subject is required',
         },
         message: {
-            required: 'Tin nhắn là bắt buộc',
-            minLength: `Tin nhắn phải có ít nhất ${value} ký tự`,
-            maxLength: `Tin nhắn không được vượt quá ${value} ký tự`,
+            required: 'Message is required',
+            minLength: `Message must be at least ${value} characters`,
+            maxLength: `Message cannot exceed ${value} characters`,
         },
         agreement: {
-            required: 'Bạn phải đồng ý với chính sách bảo mật và điều khoản sử dụng',
+            required: 'You must agree to the privacy policy and terms of use',
         },
     };
 
-    return messages[field]?.[type] || 'Dữ liệu không hợp lệ';
+    return messages[field]?.[type] || 'Invalid data';
 };
 
 const validateForm = (data: ContactForm): FormErrors => {
@@ -281,14 +281,14 @@ export default function ContactFormComponent({
 
             setStatus({
                 type: 'success',
-                message: 'Cảm ơn bạn đã liên hệ! Tôi sẽ phản hồi trong vòng 24 giờ.',
+                message: 'Thank you for your message! I will respond within 24 hours.',
             });
 
             dispatch({ type: 'RESET_FORM' });
             onSubmitSuccess?.(formState.data);
 
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau.';
+            const errorMessage = error instanceof Error ? error.message : 'An error occurred while sending the message. Please try again later.';
 
             console.error('Contact form submission error:', error);
             setStatus({
@@ -337,9 +337,9 @@ export default function ContactFormComponent({
                 </div>
                 <div>
                     <Badge variant={badgeVariants[status.type] as 'default' | 'destructive'} className="mb-2">
-                        {status.type === 'loading' && 'Đang gửi tin nhắn...'}
-                        {status.type === 'success' && 'Gửi thành công!'}
-                        {status.type === 'error' && 'Có lỗi xảy ra'}
+                        {status.type === 'loading' && 'Sending message...'}
+                        {status.type === 'success' && 'Successfully sent!'}
+                        {status.type === 'error' && 'An error occurred'}
                     </Badge>
                     {status.message && (
                         <p className="text-sm mt-1">{status.message}</p>
@@ -357,7 +357,7 @@ export default function ContactFormComponent({
     return (
         <Card className={className}>
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">Gửi tin nhắn</CardTitle>
+                <CardTitle className="text-2xl font-bold">Send Message</CardTitle>
             </CardHeader>
             <CardContent>
                 {renderStatus()}
@@ -366,14 +366,14 @@ export default function ContactFormComponent({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="contact-firstName">
-                                Tên <span className="text-red-500">*</span>
+                                First Name <span className="text-red-500">*</span>
                             </Label>
                             <Input
                                 id="contact-firstName"
                                 name="firstName"
                                 value={formState.data.firstName}
                                 onChange={handleInputChange}
-                                placeholder="Nhập tên của bạn"
+                                placeholder="Enter your first name"
                                 disabled={formState.isSubmitting}
                                 className={formState.errors.firstName ? 'border-red-300' : ''}
                             />
@@ -384,14 +384,14 @@ export default function ContactFormComponent({
 
                         <div className="space-y-2">
                             <Label htmlFor="contact-lastName">
-                                Họ <span className="text-red-500">*</span>
+                                Last Name <span className="text-red-500">*</span>
                             </Label>
                             <Input
                                 id="contact-lastName"
                                 name="lastName"
                                 value={formState.data.lastName}
                                 onChange={handleInputChange}
-                                placeholder="Nhập họ của bạn"
+                                placeholder="Enter your last name"
                                 disabled={formState.isSubmitting}
                                 className={formState.errors.lastName ? 'border-red-300' : ''}
                             />
@@ -421,7 +421,7 @@ export default function ContactFormComponent({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="contact-phone">Số điện thoại</Label>
+                        <Label htmlFor="contact-phone">Phone Number</Label>
                         <Input
                             id="contact-phone"
                             name="phone"
@@ -439,7 +439,7 @@ export default function ContactFormComponent({
 
                     <div className="space-y-2">
                         <Label htmlFor="contact-subject">
-                            Chủ đề <span className="text-red-500">*</span>
+                            Subject <span className="text-red-500">*</span>
                         </Label>
                         <select
                             id="contact-subject"
@@ -450,7 +450,7 @@ export default function ContactFormComponent({
                             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${formState.errors.subject ? 'border-red-300' : 'border-gray-300'
                                 }`}
                         >
-                            <option value="">Chọn chủ đề</option>
+                            <option value="">Select subject</option>
                             {SUBJECT_OPTIONS.map(option => (
                                 <option key={option.value} value={option.value}>
                                     {option.label}
@@ -464,7 +464,7 @@ export default function ContactFormComponent({
 
                     <div className="space-y-2">
                         <Label htmlFor="contact-message">
-                            Tin nhắn <span className="text-red-500">*</span>
+                            Message <span className="text-red-500">*</span>
                         </Label>
                         <Textarea
                             id="contact-message"
@@ -472,7 +472,7 @@ export default function ContactFormComponent({
                             rows={5}
                             value={formState.data.message}
                             onChange={handleInputChange}
-                            placeholder="Hãy chia sẻ chi tiết về dự án hoặc ý tưởng của bạn..."
+                            placeholder="Please share details about your project or idea..."
                             disabled={formState.isSubmitting}
                             className={formState.errors.message ? 'border-red-300' : ''}
                             maxLength={FORM_CONSTRAINTS.message?.maxLength}
@@ -498,13 +498,13 @@ export default function ContactFormComponent({
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
                         />
                         <Label htmlFor="contact-agreement" className="text-sm">
-                            Tôi đồng ý với{' '}
+                            I agree to the{' '}
                             <a href="/privacy" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
-                                chính sách bảo mật
+                                privacy policy
                             </a>{' '}
-                            và{' '}
+                            and{' '}
                             <a href="/terms" className="text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">
-                                điều khoản sử dụng
+                                terms of service
                             </a>
                             {' '}<span className="text-red-500">*</span>
                         </Label>
@@ -521,12 +521,12 @@ export default function ContactFormComponent({
                         {formState.isSubmitting ? (
                             <>
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                Đang gửi...
+                                Sending...
                             </>
                         ) : (
                             <>
                                 <Send className="h-4 w-4 mr-2" />
-                                Gửi tin nhắn
+                                Send Message
                             </>
                         )}
                     </Button>

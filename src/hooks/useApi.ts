@@ -41,7 +41,7 @@ export function useApiCall<T>(
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -66,7 +66,7 @@ export function useApiCall<T>(
             const result = await apiCall();
             setData(result);
         } catch (err) {
-            const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+            const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -96,7 +96,7 @@ export function useBlogPosts(params?: BlogPostsParams) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -135,7 +135,7 @@ export function useFeaturedBlogPosts(limit?: number) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -174,7 +174,7 @@ export function useBlogPost(slug: string) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -213,7 +213,7 @@ export function useBlogCategories() {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -252,7 +252,7 @@ export function useBlogTags() {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -294,7 +294,7 @@ export function useProjects(params?: ProjectsParams) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi khi tải projects';
+                    const errorMessage = err instanceof ApiError ? err.message : 'Error loading projects';
                     setError(errorMessage);
                 }
             } finally {
@@ -318,7 +318,7 @@ export function useProjects(params?: ProjectsParams) {
             const result = await projectsService.getProjects(params);
             setData(result);
         } catch (err) {
-            const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi khi tải projects';
+            const errorMessage = err instanceof ApiError ? err.message : 'Error loading projects';
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -347,7 +347,7 @@ export function useFeaturedProjects(limit?: number) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -386,7 +386,7 @@ export function useProject(id: string) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -420,7 +420,7 @@ export function useContactForm() {
             await contactService.submitContactForm(data);
             setSuccess(true);
         } catch (err) {
-            const errorMessage = err instanceof ApiError ? err.message : 'Gửi form thất bại';
+            const errorMessage = err instanceof ApiError ? err.message : 'Form submission failed';
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -492,7 +492,7 @@ export function useContactSubmissions(params?: ContactSubmissionsParams) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -531,7 +531,7 @@ export function useAnalyticsSummary(startDate?: string, endDate?: string) {
                 }
             } catch (err) {
                 if (!isCancelled) {
-                    const errorMessage = err instanceof ApiError ? err.message : 'Đã xảy ra lỗi';
+                    const errorMessage = err instanceof ApiError ? err.message : 'An error occurred';
                     setError(errorMessage);
                 }
             } finally {
@@ -598,7 +598,7 @@ export function useDashboardStats(): {
 
             setData(dashboardStats);
         } catch (err) {
-            const errorMessage = err instanceof ApiError ? err.message : 'Lỗi tải dữ liệu dashboard';
+            const errorMessage = err instanceof ApiError ? err.message : 'Error loading dashboard data';
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -626,7 +626,7 @@ export function useAuth() {
             setUser(response.data.user);
             authService.setAuthToken(response.data.token);
         } catch (err) {
-            const errorMessage = err instanceof ApiError ? err.message : 'Đăng nhập thất bại';
+            const errorMessage = err instanceof ApiError ? err.message : 'Login failed';
             setError(errorMessage);
             throw err;
         } finally {

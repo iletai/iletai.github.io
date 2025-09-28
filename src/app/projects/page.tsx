@@ -1,269 +1,231 @@
-'use client';
-
 import AnimatedCard from '@/components/motion/AnimatedCard';
 import FadeInSection from '@/components/motion/FadeInSection';
+import PageTransition from '@/components/motion/PageTransition';
 import AnimatedGradientText from '@/components/ui/animated-gradient-text';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MagicBackground from '@/components/ui/magic-background';
-import { useProjects } from '@/hooks/useApi';
+import { projectsService } from '@/lib/api';
 import { Project } from '@/lib/types';
-import { AlertCircle, ArrowLeft, ExternalLink, Github, Loader2 } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
-// Static data - API integration ready but backend not implemented yet
-const projects = [
-    {
-        id: "1",
-        title: "E-commerce Platform",
-        description: "Full-stack e-commerce solution với React, Node.js và MongoDB. Hỗ trợ thanh toán Stripe, quản lý inventory và user authentication.",
-        longDescription: "Một nền tảng thương mại điện tử hoàn chỉnh được xây dựng với React cho frontend và Node.js cho backend. Ứng dụng hỗ trợ đầy đủ các tính năng từ quản lý sản phẩm, giỏ hàng, thanh toán đến quản lý đơn hàng.",
-        technologies: ["React", "Node.js", "MongoDB", "Stripe", "Express", "JWT"],
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center",
-        liveUrl: "https://example.com",
-        githubUrl: "https://github.com/example",
-        featured: true,
-        category: "fullstack",
-    },
-    {
-        id: "2",
-        title: "Task Management App",
-        description: "Ứng dụng quản lý công việc với real-time collaboration sử dụng WebSocket và Prisma ORM.",
-        longDescription: "Ứng dụng quản lý tác vụ hiện đại với khả năng cộng tác theo thời gian thực. Người dùng có thể tạo project, assign tasks, track progress và communicate với team members.",
-        technologies: ["Next.js", "TypeScript", "Prisma", "WebSocket", "PostgreSQL"],
-        image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center",
-        liveUrl: "https://example.com",
-        githubUrl: "https://github.com/example",
-        featured: true,
-        category: "fullstack",
-    },
-    {
-        id: "3",
-        title: "Weather Dashboard",
-        description: "Dashboard hiển thị thông tin thời tiết với charts và forecasting sử dụng OpenWeather API.",
-        longDescription: "Dashboard thời tiết với giao diện đẹp mắt, hiển thị thông tin thời tiết hiện tại và dự báo 7 ngày. Tích hợp charts để visualize temperature trends và precipitation data.",
-        technologies: ["React", "TypeScript", "Chart.js", "OpenWeather API"],
-        image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop&crop=center",
-        liveUrl: "https://example.com",
-        githubUrl: "https://github.com/example",
-        featured: false,
-        category: "frontend",
-    },
-    {
-        id: "4",
-        title: "Blog API",
-        description: "RESTful API cho blog platform với authentication, CRUD operations và file upload.",
-        longDescription: "RESTful API được xây dựng với Node.js và Express, cung cấp đầy đủ endpoints cho blog platform. Hỗ trợ user authentication, CRUD operations cho posts và comments, file upload cho images.",
-        technologies: ["Node.js", "Express", "MongoDB", "JWT", "Multer"],
-        image: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&h=600&fit=crop&crop=center",
-        githubUrl: "https://github.com/example",
-        featured: false,
-        category: "backend",
-    },
-];
+export const metadata: Metadata = {
+    title: "Projects | Le Quang Trong Tai",
+    description: "A collection of projects including full-stack web applications, mobile apps, and software solutions."
+};
 
-const categories = [
-    { id: "all", label: "Tất cả" },
-    { id: "fullstack", label: "Full-stack" },
-    { id: "frontend", label: "Frontend" },
-    { id: "backend", label: "Backend" },
-];
+// Get projects data with fallback
+async function getProjectsData(): Promise<Project[]> {
+    try {
+        const response = await projectsService.getProjects();
+        // Map API Project to local Project interface, ensuring required fields
+        const apiProjects = response.data.data || [];
+        return apiProjects.map(project => ({
+            id: project.id,
+            title: project.title,
+            description: project.description,
+            longDescription: project.longDescription,
+            technologies: project.technologies,
+            image: project.image || '/api/placeholder/600/400',
+            liveUrl: project.liveUrl,
+            githubUrl: project.githubUrl,
+            featured: project.featured ?? false,
+            category: project.category,
+            status: project.status,
+            startDate: project.startDate || new Date().toISOString().split('T')[0],
+            endDate: project.endDate
+        }));
+    } catch (error) {
+        console.error('Failed to fetch projects:', error);
+        // Return fallback data with proper Project interface
+        return [
+            {
+                id: "1",
+                title: "E-commerce Platform",
+                description: "Full-stack e-commerce solution with React, Node.js and MongoDB. Supports Stripe payments, inventory management and user authentication.",
+                longDescription: "A complete e-commerce platform built with React for frontend and Node.js for backend. The application supports full features from product management, shopping cart, payment to order management.",
+                technologies: ["React", "Node.js", "MongoDB", "Stripe", "Express", "JWT"],
+                image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center",
+                liveUrl: "https://example.com",
+                githubUrl: "https://github.com/example",
+                featured: true,
+                category: "fullstack",
+                status: "completed" as const,
+                startDate: "2024-01-01",
+                endDate: "2024-03-01"
+            },
+            {
+                id: "2",
+                title: "Task Management App",
+                description: "Task management application with real-time collaboration using WebSocket and Prisma ORM.",
+                longDescription: "Modern task management application with real-time collaboration capabilities. Users can create projects, assign tasks, track progress and communicate with team members.",
+                technologies: ["Next.js", "TypeScript", "Prisma", "WebSocket", "PostgreSQL"],
+                image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center",
+                liveUrl: "https://example.com",
+                githubUrl: "https://github.com/example",
+                featured: true,
+                category: "fullstack",
+                status: "completed" as const,
+                startDate: "2024-02-01",
+                endDate: "2024-04-01"
+            },
+            {
+                id: "3",
+                title: "Weather Dashboard",
+                description: "Weather information dashboard with charts and forecasting using OpenWeather API.",
+                longDescription: "Beautiful weather dashboard displaying current weather information and 7-day forecast. Integrated charts to visualize temperature trends and precipitation data.",
+                technologies: ["React", "TypeScript", "Chart.js", "OpenWeather API"],
+                image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop&crop=center",
+                liveUrl: "https://example.com",
+                githubUrl: "https://github.com/example",
+                featured: false,
+                category: "frontend",
+                status: "completed" as const,
+                startDate: "2023-11-01",
+                endDate: "2023-12-01"
+            }
+        ];
+    }
+}
 
-export default function ProjectsPage() {
-    const [selectedCategory, setSelectedCategory] = useState("all");
+export default async function ProjectsPage() {
+    const projects = await getProjectsData();
 
-    // API calls
-    const { data: allProjects, loading, error } = useProjects();
-
-    // Handle API data structure - the API returns data.projects, not data.data
-    const apiProjects = allProjects?.data as Record<string, unknown>;
-    const projectsData = (apiProjects?.projects as Project[]) || (apiProjects?.data as Project[]) || projects;
-
-    // Filter projects by category
-    const filteredProjects = selectedCategory === "all"
-        ? projectsData
-        : projectsData.filter((project) => (project as Project).category === selectedCategory);
     return (
-        <MagicBackground variant="combined" intensity="medium" className="min-h-screen py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <FadeInSection className="mb-12">
-                    <Link
-                        href="/"
-                        className="text-blue-600 hover:text-blue-800 inline-flex items-center mb-6"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Về trang chủ
-                    </Link>
+        <PageTransition>
+            <MagicBackground variant="combined" intensity="medium">
+                <main className="relative min-h-screen pt-32 pb-12">
+                    <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-blue-500/10 to-transparent blur-3xl" />
 
-                    {/* API Status Notice */}
-                    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <div className="flex items-center">
-                            <AlertCircle className="h-5 w-5 text-green-600 mr-2" />
-                            <span className="text-green-800 font-medium">
-                                {allProjects && apiProjects ? 'API Connected ✅' : 'API Integration Active'}
-                            </span>
-                        </div>
-                        <p className="text-green-700 text-sm mt-1">
-                            {allProjects && apiProjects
-                                ? `Đang hiển thị dữ liệu từ backend API. Tìm thấy ${projectsData.length} projects.`
-                                : 'Projects API đã tích hợp. Fallback data được sử dụng khi API không khả dụng.'
-                            }
-                        </p>
-                    </div>
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        {/* Header */}
+                        <FadeInSection className="text-center mb-12">
+                            <AnimatedGradientText className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 sm:text-sm mb-6">
+                                Portfolio
+                            </AnimatedGradientText>
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                                My Projects
+                            </h1>
+                            <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+                                A collection of projects I&apos;ve worked on, from full-stack web applications to
+                                backend APIs and frontend components. Each project is built with
+                                modern technologies and best practices.
+                            </p>
+                        </FadeInSection>
 
-                    <h1 className="text-4xl font-bold mb-4">
-                        <AnimatedGradientText className="text-4xl font-bold">
-                            Dự án của tôi
-                        </AnimatedGradientText>
-                    </h1>
-                    <p className="text-lg text-muted-foreground max-w-3xl">
-                        Tổng hợp các dự án mà tôi đã thực hiện, từ ứng dụng web full-stack đến
-                        các API backend và frontend components. Mỗi dự án đều được build với
-                        công nghệ hiện đại và best practices.
-                    </p>
-                </FadeInSection>
+                        {/* Projects Grid */}
+                        <div className="grid gap-8 lg:gap-12">
+                            {projects.map((project, index) => (
+                                <FadeInSection
+                                    key={project.id}
+                                    delay={index * 0.1}
+                                    className="group"
+                                >
+                                    <AnimatedCard className="overflow-hidden bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:border-blue-200/50 transition-all duration-300">
+                                        <div className="grid lg:grid-cols-2 gap-8">
+                                            {/* Project Image */}
+                                            <div className="relative aspect-video lg:aspect-square overflow-hidden">
+                                                <Image
+                                                    src={project.image || "https://images.unsplash.com/photo-1557838923-2985c318be48?w=800&h=600&fit=crop&crop=center"}
+                                                    alt={project.title}
+                                                    fill
+                                                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                                />
+                                                {project.featured && (
+                                                    <div className="absolute top-4 left-4">
+                                                        <Badge variant="secondary" className="bg-blue-600 text-white">
+                                                            Featured
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                            </div>
 
-                {/* Category Filter */}
-                <FadeInSection direction="up" delay={0.2} className="mb-8">
-                    <div className="flex flex-wrap gap-4">
-                        {categories.map((category) => (
-                            <Button
-                                key={category.id}
-                                variant={selectedCategory === category.id ? "default" : "outline"}
-                                className="px-4 py-2"
-                                onClick={() => setSelectedCategory(category.id)}
-                            >
-                                {category.label}
-                            </Button>
-                        ))}
-                    </div>
-                </FadeInSection>
+                                            {/* Project Details */}
+                                            <div className="p-6 lg:p-8 flex flex-col justify-between">
+                                                <div>
+                                                    <CardHeader className="p-0 mb-4">
+                                                        <CardTitle className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
+                                                            {project.title}
+                                                        </CardTitle>
+                                                        <p className="text-gray-600 leading-relaxed">
+                                                            {project.longDescription || project.description}
+                                                        </p>
+                                                    </CardHeader>
 
-                {/* Loading State */}
-                {loading && (
-                    <div className="flex justify-center items-center py-12">
-                        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-                        <span className="ml-2 text-lg">Đang tải projects...</span>
-                    </div>
-                )}
+                                                    <CardContent className="p-0">
+                                                        {/* Technologies */}
+                                                        <div className="flex flex-wrap gap-2 mb-6">
+                                                            {project.technologies.map((tech) => (
+                                                                <Badge key={tech} variant="outline" className="text-xs">
+                                                                    {tech}
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
+                                                    </CardContent>
+                                                </div>
 
-                {/* Error State */}
-                {error && !loading && (
-                    <div className="text-center py-12">
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-                            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                            <h3 className="text-lg font-semibold text-red-900 mb-2">Lỗi khi tải dữ liệu</h3>
-                            <p className="text-red-700 mb-4">{error}</p>
-                            <p className="text-sm text-red-600">Đang hiển thị dữ liệu tĩnh thay thế.</p>
-                        </div>
-                    </div>
-                )}
-
-                {/* Projects Grid */}
-                {!loading && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredProjects.map((project, index) => (
-                            <AnimatedCard key={project.id} className="h-full flex flex-col" index={index}>
-                                {/* Project Image */}
-                                <div className="h-48 relative overflow-hidden rounded-t-lg">
-                                    <Image
-                                        src={project.image || '/placeholder-project.jpg'}
-                                        alt={project.title}
-                                        fill
-                                        className="object-cover transition-transform duration-300 hover:scale-105"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    />
-                                </div>
-
-                                <CardHeader>
-                                    {/* Featured Badge */}
-                                    {project.featured && (
-                                        <Badge variant="secondary" className="mb-2 w-fit">
-                                            Featured
-                                        </Badge>
-                                    )}
-
-                                    <CardTitle className="text-xl">
-                                        {project.title}
-                                    </CardTitle>
-                                </CardHeader>
-
-                                <CardContent className="flex-1 flex flex-col justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground mb-4 line-clamp-3">
-                                            {project.description}
-                                        </p>
-
-                                        {/* Technologies */}
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {project.technologies.slice(0, 3).map((tech) => (
-                                                <Badge
-                                                    key={tech}
-                                                    variant="outline"
-                                                >
-                                                    {tech}
-                                                </Badge>
-                                            ))}
-                                            {project.technologies.length > 3 && (
-                                                <Badge variant="outline">
-                                                    +{project.technologies.length - 3}
-                                                </Badge>
-                                            )}
+                                                {/* Action Buttons */}
+                                                <div className="flex gap-4">
+                                                    {project.liveUrl && (
+                                                        <Button asChild>
+                                                            <Link
+                                                                href={project.liveUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <ExternalLink className="h-4 w-4" />
+                                                                Live Demo
+                                                            </Link>
+                                                        </Button>
+                                                    )}
+                                                    {project.githubUrl && (
+                                                        <Button variant="outline" asChild>
+                                                            <Link
+                                                                href={project.githubUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <Github className="h-4 w-4" />
+                                                                Source Code
+                                                            </Link>
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </AnimatedCard>
+                                </FadeInSection>
+                            ))}
+                        </div>
 
-                                    {/* Actions */}
-                                    <div className="flex gap-2">
-                                        {project.liveUrl && (
-                                            <Button variant="outline" size="sm" asChild>
-                                                <a
-                                                    href={project.liveUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <ExternalLink className="h-4 w-4 mr-2" />
-                                                    Live Demo
-                                                </a>
-                                            </Button>
-                                        )}
-                                        {project.githubUrl && (
-                                            <Button variant="outline" size="sm" asChild>
-                                                <a
-                                                    href={project.githubUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <Github className="h-4 w-4 mr-2" />
-                                                    Code
-                                                </a>
-                                            </Button>
-                                        )}
-                                    </div>
-                                </CardContent>
-                            </AnimatedCard>
-                        ))}
+                        {/* Call to Action */}
+                        <FadeInSection className="text-center mt-16">
+                            <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-8 lg:p-12">
+                                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
+                                    Interested in my projects?
+                                </h2>
+                                <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+                                    Get in touch to discuss your next project
+                                </p>
+                                <Button size="lg" asChild>
+                                    <Link href="/contact">
+                                        Let&apos;s Work Together
+                                    </Link>
+                                </Button>
+                            </div>
+                        </FadeInSection>
                     </div>
-                )}
-
-                {/* CTA Section */}
-                <FadeInSection direction="up" delay={0.4} className="mt-16 text-center">
-                    <h2 className="text-2xl font-bold mb-4">
-                        Quan tâm đến dự án của tôi?
-                    </h2>
-                    <p className="text-muted-foreground mb-6">
-                        Hãy liên hệ để thảo luận về dự án tiếp theo của bạn
-                    </p>
-                    <Button asChild size="lg">
-                        <Link href="/contact">
-                            Liên hệ ngay
-                        </Link>
-                    </Button>
-                </FadeInSection>
-            </div>
-        </MagicBackground>
+                </main>
+            </MagicBackground>
+        </PageTransition>
     );
 }
+
+
+// Filter projects by category

@@ -20,92 +20,96 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "About | Lê Quang Trọng Tài",
+    title: "About | Le Quang Trong Tai",
     description:
-        "Khám phá hành trình, triết lý và giá trị cốt lõi trong công việc phát triển sản phẩm số của Lê Quang Trọng Tài."
+        "Discover the journey, philosophy, and core values in digital product development of Le Quang Trong Tai."
 };
 
 const stats = [
     {
-        label: "Năm kinh nghiệm",
+        label: "Years Experience",
         value: "07+",
-        description: "Phát triển sản phẩm cho startup và enterprise với yêu cầu khắt khe"
+        description: "Cross-platform development from mobile native to enterprise web platforms"
     },
     {
-        label: "Dự án hoàn thành",
-        value: "45+",
-        description: "Từ MVP tốc độ cao đến nền tảng quy mô hàng triệu người dùng"
+        label: "Apps Published",
+        value: "15+",
+        description: "iOS apps, game titles, and web platforms serving millions of users"
     },
     {
-        label: "Tối ưu hiệu suất",
+        label: "Performance Optimization",
         value: "<200ms",
-        description: "Thời gian phản hồi trung bình nhờ kiến trúc hiện đại và caching thông minh"
+        description: "Average response time on mobile and web through optimized architecture"
     },
     {
-        label: "Độ hài lòng",
-        value: "98%",
-        description: "Điểm NPS từ khách hàng và đối tác trong 3 năm gần nhất"
+        label: "App Store Rating",
+        value: "4.8★",
+        description: "Average rating for published iOS applications"
     }
 ] as const;
 
 const journey = [
     {
         year: "2024",
-        role: "Lead Frontend Engineer",
-        company: "VisionAI Platform",
+        role: "Full Stack Engineer",
+        company: "FPT Software",
         description:
-            "Dẫn dắt team xây dựng platform AI-first với kiến trúc micro-frontend, tối ưu cho tốc độ phát triển và hiệu suất runtime.",
-        stack: ["Next.js", "Turborepo", "TailwindCSS", "GraphQL"]
+            "Leading team in building AI-first platforms with micro-frontend architecture, optimized for development velocity and runtime performance.",
+        stack: ["Next.js", "Turborepo", "TailwindCSS", "GraphQL", "React", "NestJS", "PostgreSQL", "AWS"]
     },
     {
-        year: "2022",
-        role: "Senior Fullstack Developer",
-        company: "FintechNova",
+        year: "2020-2024",
+        role: "Senior iOS Developer",
+        company: "FPT Software",
         description:
-            "Thiết kế hệ thống onboarding đa quốc gia với i18n, security compliance và trải nghiệm người dùng đột phá.",
-        stack: ["React", "NestJS", "PostgreSQL", "AWS"]
+            "Developed high-quality native iOS applications for international markets, from music players to healthcare and luxury watch trading platforms. Specialized in SwiftUI, Combine, and MVVM architecture.",
+        stack: ["Swift", "SwiftUI", "Combine", "HealthKit", "CoreData", "AVFoundation"]
     },
     {
-        year: "2020",
-        role: "Product Engineer",
-        company: "HealthTech Labs",
+        year: "2018-2020",
+        role: "Game Developer",
+        company: "Gameloft",
         description:
-            "Triển khai nền tảng telemedicine real-time, đảm bảo tuân thủ HIPAA và khả năng mở rộng gấp đôi lượng người dùng.",
-        stack: ["Next.js", "WebRTC", "Redis", "Kubernetes"]
+            "Programmed RPG games using C++, participated in developing mobile game titles with millions of downloads. Optimized performance and player experience across multiple platforms.",
+        stack: ["C++", "Game Engine", "Mobile Optimization", "Cross-platform"]
     }
 ] as const;
 
 const values = [
     {
         icon: <Lightbulb className="h-6 w-6 text-amber-500" aria-hidden="true" />,
-        title: "Thiết kế dẫn đầu bởi insight",
+        title: "Insight-Driven Design",
         description:
-            "Mọi tính năng đều bắt đầu từ bài toán của người dùng. Tôi sắp xếp roadmap dựa trên data, phỏng vấn định tính và thử nghiệm liên tục."
+            "Every feature starts with user problems. I prioritize roadmaps based on data, qualitative interviews, and continuous experimentation."
     },
     {
         icon: <Workflow className="h-6 w-6 text-sky-500" aria-hidden="true" />,
-        title: "Quy trình bền vững",
+        title: "Sustainable Processes",
         description:
-            "Xây dựng pipeline CI/CD, coding standard và design system giúp team phát triển nhanh nhưng vẫn dễ bảo trì."
+            "Building CI/CD pipelines, coding standards, and design systems that enable teams to develop fast while maintaining quality."
     },
     {
         icon: <HeartHandshake className="h-6 w-6 text-rose-500" aria-hidden="true" />,
-        title: "Hợp tác minh bạch",
+        title: "Transparent Collaboration",
         description:
-            "Ưu tiên giao tiếp rõ ràng, phản hồi nhanh chóng và luôn chủ động đề xuất giải pháp tốt hơn cho sản phẩm."
+            "Prioritizing clear communication, quick feedback, and proactively proposing better solutions for products."
     },
     {
         icon: <Compass className="h-6 w-6 text-emerald-500" aria-hidden="true" />,
-        title: "Khả năng thích ứng",
+        title: "Adaptability",
         description:
-            "Luôn cập nhật công nghệ mới, thử nghiệm có kiểm soát và chọn giải pháp phù hợp nhất với bối cảnh doanh nghiệp."
+            "Staying updated with new technologies, conducting controlled experiments, and choosing solutions that best fit the business context."
     }
 ] as const;
 
 const toolbelt = [
     {
-        title: "Frontend",
+        title: "Frontend & Web",
         items: ["React 19", "Next.js 15", "TypeScript", "Tailwind CSS", "Framer Motion", "Storybook"]
+    },
+    {
+        title: "Mobile & Native",
+        items: ["Swift", "SwiftUI", "Combine", "HealthKit", "CoreData", "AVFoundation", "Xamarin"]
     },
     {
         title: "Backend & Cloud",
@@ -113,11 +117,15 @@ const toolbelt = [
     },
     {
         title: "Dev Experience",
-        items: ["Turborepo", "Nx", "Vite", "Vitest", "Playwright", "GitHub Actions", "Sentry"]
+        items: ["Turborepo", "Nx", "Vite", "Vitest", "Playwright", "GitHub Actions", "Fastlane"]
     },
     {
         title: "Product & Design",
         items: ["Figma", "Framer", "Notion", "Linear", "Hotjar", "Amplitude"]
+    },
+    {
+        title: "Game & Graphics",
+        items: ["C++", "Game Engine", "Core Graphics", "Metal", "Performance Optimization", "Cross-platform"]
     }
 ] as const;
 
@@ -125,38 +133,38 @@ export default function AboutPage() {
     return (
         <MagicBackground variant="combined" intensity="medium">
             <PageTransition>
-                <main className="relative min-h-screen py-16 sm:py-24">
+                <main className="relative min-h-screen pt-32 pb-12 sm:pb-16 md:pb-20 lg:pb-24">
                     <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-blue-500/10 to-transparent blur-3xl" aria-hidden="true" />
 
-                    <div className="mx-auto flex w-full max-w-6xl flex-col gap-20 px-4 sm:px-6 lg:px-8">
-                        <section className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+                    <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:gap-16 sm:px-6 md:gap-20 lg:px-8">
+                        <section className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-16">
                             <FadeInSection>
                                 <div>
-                                    <AnimatedGradientText className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+                                    <AnimatedGradientText className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 sm:text-sm">
                                         About
                                     </AnimatedGradientText>
-                                    <h1 className="mt-6 text-4xl font-bold text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
+                                    <h1 className="mt-4 text-3xl font-bold text-gray-900 dark:text-white sm:mt-6 sm:text-4xl md:text-5xl lg:text-6xl">
                                         <TextAnimate animationType="word" animation="slideUp">
-                                            Kiến tạo trải nghiệm số tinh tế và bền vững
+                                            Crafting sophisticated and sustainable digital experiences
                                         </TextAnimate>
                                     </h1>
                                     <TypingAnimation
-                                        className="mt-6 text-lg leading-relaxed text-gray-600 dark:text-gray-300"
+                                        className="mt-4 text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:mt-6 sm:text-lg sm:leading-relaxed"
                                         duration={55}
                                         startDelay={600}
                                     >
-                                        Tôi là Lê Quang Trọng Tài – một product engineer yêu thích việc kết hợp nghệ thuật thiết kế với sức mạnh của công nghệ. Mission của tôi là giúp doanh nghiệp tạo ra sản phẩm số mang lại giá trị dài hạn cho người dùng.
+                                        I&apos;m Le Quang Trong Tai – a versatile engineer with experience ranging from mobile native (iOS/Swift) to modern web platforms. From game development with C++ to healthcare apps with SwiftUI, I&apos;m passionate about creating digital products that positively impact users&apos; lives.
                                     </TypingAnimation>
-                                    <div className="mt-8 flex flex-wrap gap-4">
-                                        <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+                                    <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
+                                        <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 transition-all duration-200">
                                             <Link href="/projects">
-                                                Khám phá dự án
-                                                <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
+                                                Explore Projects
+                                                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
                                             </Link>
                                         </Button>
-                                        <Button asChild variant="outline" size="lg">
+                                        <Button asChild variant="outline" size="lg" className="transition-all duration-200">
                                             <Link href="/contact">
-                                                Kết nối cùng tôi
+                                                Get In Touch
                                             </Link>
                                         </Button>
                                     </div>
@@ -164,22 +172,23 @@ export default function AboutPage() {
                             </FadeInSection>
 
                             <FadeInSection delay={0.2}>
-                                <div className="relative mx-auto max-w-sm overflow-hidden rounded-3xl border border-white/40 bg-white/70 p-1 shadow-xl backdrop-blur dark:border-white/10 dark:bg-slate-900/80">
-                                    <div className="relative h-80 w-full overflow-hidden rounded-[1.35rem]">
+                                <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-white/40 bg-white/70 p-1 shadow-xl backdrop-blur transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] dark:border-white/10 dark:bg-slate-900/80 sm:max-w-md lg:max-w-sm">
+                                    <div className="relative h-80 w-full overflow-hidden rounded-[1.35rem] sm:h-96">
                                         <Image
                                             src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=800&h=1000&fit=crop&crop=entropy"
-                                            alt="Không gian làm việc sáng tạo với ánh sáng tự nhiên"
+                                            alt="Creative workspace with natural lighting"
                                             fill
-                                            className="object-cover"
+                                            className="object-cover transition-transform duration-500 hover:scale-110"
                                             priority
                                         />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                                     </div>
-                                    <div className="mt-4 space-y-2 px-4 pb-4">
-                                        <p className="text-sm font-semibold text-blue-600 dark:text-blue-300">
-                                            Product Engineer / Experience Crafter
+                                    <div className="mt-4 space-y-3 px-4 pb-5 sm:px-5 sm:pb-6">
+                                        <p className="text-sm font-semibold text-blue-600 transition-colors dark:text-blue-300 sm:text-base">
+                                            iOS Developer / Fullstack Engineer
                                         </p>
-                                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                                            Tập trung vào hiệu suất, accessibility và storytelling cho mọi sản phẩm.
+                                        <p className="text-sm leading-relaxed text-gray-600 transition-colors dark:text-gray-300 sm:text-base sm:leading-relaxed">
+                                            Specializing in mobile native, web platforms, and game development with focus on UX and performance.
                                         </p>
                                     </div>
                                 </div>
@@ -191,29 +200,29 @@ export default function AboutPage() {
                                 <div className="text-center">
                                     <h2
                                         id="about-stats"
-                                        className="text-3xl font-bold text-gray-900 dark:text-white"
+                                        className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl"
                                     >
                                         <AnimatedGradientText>
-                                            Những con số biết nói
+                                            Numbers That Speak
                                         </AnimatedGradientText>
                                     </h2>
-                                    <p className="mt-3 max-w-2xl text-center text-base text-gray-600 dark:text-gray-300">
-                                        Những chỉ số dưới đây được tổng hợp từ các dự án gần đây và đánh giá thực tế từ khách hàng.
+                                    <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                                        These metrics are compiled from recent projects and real client evaluations.
                                     </p>
                                 </div>
-                                <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                                <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
                                     {stats.map((stat, index) => (
-                                        <AnimatedCard key={stat.label} index={index} className="h-full">
-                                            <CardHeader>
-                                                <CardTitle className="text-4xl font-bold text-blue-600 dark:text-blue-400">
+                                        <AnimatedCard key={stat.label} index={index} className="h-full transition-all duration-300 hover:scale-[1.02]">
+                                            <CardHeader className="pb-2 sm:pb-3">
+                                                <CardTitle className="text-3xl font-bold text-blue-600 dark:text-blue-400 sm:text-4xl">
                                                     {stat.value}
                                                 </CardTitle>
-                                                <CardDescription className="text-base font-semibold text-gray-900 dark:text-white">
+                                                <CardDescription className="text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                                                     {stat.label}
                                                 </CardDescription>
                                             </CardHeader>
-                                            <CardContent>
-                                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                            <CardContent className="pt-0">
+                                                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-300 sm:text-sm">
                                                     {stat.description}
                                                 </p>
                                             </CardContent>
@@ -223,49 +232,49 @@ export default function AboutPage() {
                             </FadeInSection>
                         </section>
 
-                        <section aria-labelledby="about-journey" className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-                            <FadeInSection direction="right" className="space-y-4">
+                        <section aria-labelledby="about-journey" className="grid gap-8 md:gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
+                            <FadeInSection direction="right" className="space-y-3 sm:space-y-4">
                                 <h2
                                     id="about-journey"
-                                    className="text-3xl font-bold text-gray-900 dark:text-white"
+                                    className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl"
                                 >
                                     <AnimatedGradientText>
-                                        Hành trình phát triển
+                                        Development Journey
                                     </AnimatedGradientText>
                                 </h2>
-                                <p className="text-base text-gray-600 dark:text-gray-300">
-                                    Tôi luôn tin rằng hành trình tạo ra sản phẩm tốt bắt đầu từ việc kết nối sâu sắc với người dùng, chuyển hóa insight thành giải pháp có thể mở rộng và đo lường được.
+                                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:text-base sm:leading-relaxed">
+                                    I believe that creating great products starts with deep user connections, transforming insights into scalable and measurable solutions.
                                 </p>
-                                <div className="inline-flex items-center gap-2 rounded-full bg-blue-600/10 px-4 py-2 text-sm font-medium text-blue-700 dark:text-blue-300">
-                                    <Sparkles className="h-4 w-4" aria-hidden="true" />
+                                <div className="inline-flex items-center gap-2 rounded-full bg-blue-600/10 px-3 py-1.5 text-xs font-medium text-blue-700 dark:text-blue-300 sm:px-4 sm:py-2 sm:text-sm">
+                                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" aria-hidden="true" />
                                     Continuous Discovery & Delivery
                                 </div>
                             </FadeInSection>
 
                             <FadeInSection delay={0.1}>
-                                <ol className="relative space-y-8 border-l border-blue-100 pl-6 dark:border-blue-900/40">
+                                <ol className="relative space-y-6 border-l border-blue-100 pl-4 dark:border-blue-900/40 sm:space-y-8 sm:pl-6">
                                     {journey.map((item) => (
-                                        <li key={`${item.year}-${item.company}`} className="ml-4">
-                                            <div className="absolute -left-[9px] h-4 w-4 rounded-full border-2 border-white bg-blue-500 dark:border-slate-900" aria-hidden="true" />
-                                            <div className="rounded-2xl border border-gray-100/70 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-slate-900/70">
-                                                <div className="flex flex-wrap items-center justify-between gap-2">
-                                                    <p className="text-sm font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-300">
+                                        <li key={`${item.year}-${item.company}`} className="ml-2 sm:ml-4">
+                                            <div className="absolute -left-[7px] h-3 w-3 rounded-full border-2 border-white bg-blue-500 dark:border-slate-900 sm:-left-[9px] sm:h-4 sm:w-4" aria-hidden="true" />
+                                            <div className="rounded-2xl border border-gray-100/70 bg-white/80 p-4 shadow-sm backdrop-blur transition-all duration-300 hover:shadow-md hover:scale-[1.01] dark:border-white/10 dark:bg-slate-900/70 sm:p-6">
+                                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                                    <p className="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-300 sm:text-sm">
                                                         {item.year}
                                                     </p>
-                                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                                        <Award className="h-4 w-4" aria-hidden="true" />
+                                                    <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
+                                                        <Award className="h-3 w-3 sm:h-4 sm:w-4" aria-hidden="true" />
                                                         {item.company}
                                                     </div>
                                                 </div>
-                                                <h3 className="mt-3 text-xl font-semibold text-gray-900 dark:text-white">
+                                                <h3 className="mt-2 text-lg font-semibold text-gray-900 dark:text-white sm:mt-3 sm:text-xl">
                                                     {item.role}
                                                 </h3>
-                                                <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                                                <p className="mt-1.5 text-xs leading-relaxed text-gray-600 dark:text-gray-300 sm:mt-2 sm:text-sm sm:leading-relaxed">
                                                     {item.description}
                                                 </p>
-                                                <div className="mt-4 flex flex-wrap gap-2" aria-label="Công nghệ tiêu biểu">
+                                                <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2" aria-label="Featured Technologies">
                                                     {item.stack.map((tech) => (
-                                                        <Badge key={tech} variant="secondary">
+                                                        <Badge key={tech} variant="secondary" className="text-xs sm:text-sm">
                                                             {tech}
                                                         </Badge>
                                                     ))}
@@ -282,28 +291,28 @@ export default function AboutPage() {
                                 <div className="text-center">
                                     <h2
                                         id="about-values"
-                                        className="text-3xl font-bold text-gray-900 dark:text-white"
+                                        className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl"
                                     >
                                         <AnimatedGradientText>
-                                            Giá trị dẫn đường
+                                            Guiding Values
                                         </AnimatedGradientText>
                                     </h2>
-                                    <p className="mt-3 max-w-2xl text-center text-base text-gray-600 dark:text-gray-300">
-                                        Bốn nguyên tắc giúp tôi giữ vững chất lượng trong mọi dự án – từ discovery đến delivery.
+                                    <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                                        Four principles that help me maintain quality across all projects – from discovery to delivery.
                                     </p>
                                 </div>
-                                <div className="mt-10 grid gap-6 md:grid-cols-2">
+                                <div className="mt-8 grid gap-4 sm:mt-10 sm:gap-6 md:grid-cols-2">
                                     {values.map((value, index) => (
-                                        <AnimatedCard key={value.title} index={index} className="h-full">
-                                            <CardHeader className="flex flex-row items-start gap-4">
-                                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-500/10">
+                                        <AnimatedCard key={value.title} index={index} className="h-full transition-all duration-300 hover:scale-[1.02]">
+                                            <CardHeader className="flex flex-row items-start gap-3 sm:gap-4">
+                                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-500/10 sm:h-12 sm:w-12">
                                                     {value.icon}
                                                 </div>
-                                                <div>
-                                                    <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                                                <div className="flex-1">
+                                                    <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">
                                                         {value.title}
                                                     </CardTitle>
-                                                    <CardDescription className="text-sm text-gray-600 dark:text-gray-300">
+                                                    <CardDescription className="mt-1 text-xs leading-relaxed text-gray-600 dark:text-gray-300 sm:mt-2 sm:text-sm sm:leading-relaxed">
                                                         {value.description}
                                                     </CardDescription>
                                                 </div>
@@ -314,37 +323,37 @@ export default function AboutPage() {
                             </FadeInSection>
                         </section>
 
-                        <section aria-labelledby="about-toolkit" className="grid gap-10 lg:grid-cols-[1fr_0.9fr]">
-                            <FadeInSection direction="left" className="space-y-4">
+                        <section aria-labelledby="about-toolkit" className="grid gap-8 md:gap-10 lg:grid-cols-[1fr_0.9fr] lg:gap-12">
+                            <FadeInSection direction="left" className="space-y-3 sm:space-y-4">
                                 <h2
                                     id="about-toolkit"
-                                    className="text-3xl font-bold text-gray-900 dark:text-white"
+                                    className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl"
                                 >
                                     <AnimatedGradientText>
-                                        Bộ công cụ ưa thích
+                                        Favorite Toolkit
                                     </AnimatedGradientText>
                                 </h2>
-                                <p className="text-base text-gray-600 dark:text-gray-300">
-                                    Tôi kết hợp các công cụ tốt nhất để đảm bảo lifecycle khép kín: từ lên ý tưởng, thiết kế, phát triển, test đến vận hành và đo lường hiệu quả.
+                                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:text-base sm:leading-relaxed">
+                                    I combine the best tools to ensure a complete lifecycle: from ideation and design to development, testing, operations, and measuring effectiveness.
                                 </p>
-                                <div className="flex flex-wrap items-center gap-3 text-sm text-blue-700 dark:text-blue-300">
-                                    <Sparkles className="h-4 w-4" aria-hidden="true" />
+                                <div className="flex flex-wrap items-center gap-2 text-xs text-blue-700 dark:text-blue-300 sm:gap-3 sm:text-sm">
+                                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" aria-hidden="true" />
                                     Design Systems
-                                    <Sparkles className="h-4 w-4" aria-hidden="true" />
+                                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" aria-hidden="true" />
                                     Performance SLOs
-                                    <Sparkles className="h-4 w-4" aria-hidden="true" />
+                                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" aria-hidden="true" />
                                     Developer Experience
                                 </div>
                             </FadeInSection>
 
                             <FadeInSection delay={0.15}>
-                                <div className="grid gap-6 sm:grid-cols-2">
+                                <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
                                     {toolbelt.map((group) => (
-                                        <div key={group.title} className="rounded-2xl border border-gray-100/70 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-slate-900/70">
-                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                        <div key={group.title} className="rounded-2xl border border-gray-100/70 bg-white/80 p-4 shadow-sm backdrop-blur transition-all duration-300 hover:shadow-md hover:scale-[1.01] dark:border-white/10 dark:bg-slate-900/70 sm:p-6">
+                                            <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                                                 {group.title}
                                             </h3>
-                                            <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                                            <ul className="mt-3 space-y-1.5 text-xs text-gray-600 dark:text-gray-300 sm:mt-4 sm:space-y-2 sm:text-sm">
                                                 {group.items.map((item) => (
                                                     <li key={item} className="flex items-center gap-2">
                                                         <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-500" aria-hidden="true" />
@@ -358,29 +367,29 @@ export default function AboutPage() {
                             </FadeInSection>
                         </section>
 
-                        <section aria-labelledby="about-cta" className="overflow-hidden rounded-3xl border border-blue-200/50 bg-gradient-to-br from-blue-50 via-white to-purple-50 p-10 shadow-lg dark:border-blue-500/20 dark:from-slate-900 dark:via-slate-900/70 dark:to-blue-950">
+                        <section aria-labelledby="about-cta" className="overflow-hidden rounded-3xl border border-blue-200/50 bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 shadow-lg dark:border-blue-500/20 dark:from-slate-900 dark:via-slate-900/70 dark:to-blue-950 sm:p-8 lg:p-10">
                             <FadeInSection>
-                                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                                    <div>
-                                        <AnimatedGradientText className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+                                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+                                    <div className="flex-1">
+                                        <AnimatedGradientText className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 sm:text-sm">
                                             Let&apos;s collaborate
                                         </AnimatedGradientText>
-                                        <h2 className="mt-4 text-3xl font-semibold text-gray-900 dark:text-white">
-                                            Sẵn sàng đồng hành để đưa sản phẩm của bạn lên một tầm cao mới
+                                        <h2 className="mt-3 text-2xl font-semibold text-gray-900 dark:text-white sm:mt-4 sm:text-3xl">
+                                            Ready to partner with you to elevate your product to new heights
                                         </h2>
-                                        <p className="mt-3 max-w-2xl text-base text-gray-600 dark:text-gray-300">
-                                            Từ ý tưởng đầu tiên đến quá trình scale-up, tôi có thể hỗ trợ bạn về chiến lược sản phẩm, kiến trúc kỹ thuật và trải nghiệm người dùng.
+                                        <p className="mt-2 max-w-2xl text-sm text-gray-600 dark:text-gray-300 sm:mt-3 sm:text-base">
+                                            From initial concept to scaling up, I can support you with product strategy, technical architecture, and user experience.
                                         </p>
                                     </div>
-                                    <div className="flex flex-wrap gap-4">
-                                        <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                                        <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 transition-all duration-200">
                                             <Link href="/contact">
-                                                Đặt lịch trao đổi
+                                                Schedule a consultation
                                             </Link>
                                         </Button>
-                                        <Button asChild variant="outline" size="lg">
+                                        <Button asChild variant="outline" size="lg" className="transition-all duration-200">
                                             <Link href="/projects">
-                                                Xem portfolio
+                                                View portfolio
                                             </Link>
                                         </Button>
                                     </div>

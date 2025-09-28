@@ -89,7 +89,7 @@ export default function ApiStatusPage() {
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">API Integration Status</h1>
                     <p className="text-gray-600">
-                        Trang này hiển thị trạng thái tích hợp API và kiểm tra kết nối với backend.
+                        This page displays API integration status and checks backend connectivity.
                     </p>
                 </div>
 
@@ -168,17 +168,17 @@ export default function ApiStatusPage() {
                 <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h3 className="font-semibold text-blue-900 mb-3">🚀 API Integration Status</h3>
                     <div className="space-y-2 text-sm text-blue-800">
-                        <p>✅ Frontend API client đã được setup với TypeScript types</p>
-                        <p>✅ React hooks đã sẵn sàng cho UI integration</p>
-                        <p>✅ Error handling và retry logic đã được implement</p>
-                        <p>✅ Admin dashboard đã tích hợp API với fallback data</p>
-                        <p>⚠️ Backend API chưa implement các endpoints</p>
-                        <p>⚠️ Trang Blog và Projects đang sử dụng static data</p>
+                        <p>✅ Frontend API client setup with TypeScript types</p>
+                        <p>✅ React hooks ready for UI integration</p>
+                        <p>✅ Error handling and retry logic implemented</p>
+                        <p>✅ Admin dashboard integrated with API and fallback data</p>
+                        <p>⚠️ Backend API endpoints not yet implemented</p>
+                        <p>⚠️ Blog and Projects pages are using static data</p>
                     </div>
                     <div className="mt-4 p-3 bg-white border border-blue-300 rounded">
                         <p className="text-sm text-blue-900 font-medium">Next Steps:</p>
                         <p className="text-xs text-blue-700 mt-1">
-                            Deploy backend API với các endpoints trong OpenAPI spec để kích hoạt tích hợp hoàn chỉnh.
+                            Deploy backend API with endpoints in OpenAPI spec to activate full integration.
                         </p>
                     </div>
                 </div>

@@ -65,10 +65,10 @@ export const DEFAULT_HEADERS = {
 
 // Error Messages
 export const ERROR_MESSAGES = {
-    NETWORK_ERROR: 'Lỗi kết nối mạng. Vui lòng thử lại.',
-    SERVER_ERROR: 'Lỗi máy chủ. Vui lòng thử lại sau.',
-    VALIDATION_ERROR: 'Dữ liệu không hợp lệ.',
-    UNAUTHORIZED: 'Bạn không có quyền truy cập.',
-    NOT_FOUND: 'Không tìm thấy dữ liệu.',
-    UNKNOWN_ERROR: 'Đã xảy ra lỗi không xác định.',
+    NETWORK_ERROR: 'Network connection error. Please try again.',
+    SERVER_ERROR: 'Server error. Please try again later.',
+    VALIDATION_ERROR: 'Invalid data.',
+    UNAUTHORIZED: 'You do not have access permission.',
+    NOT_FOUND: 'Data not found.',
+    UNKNOWN_ERROR: 'An unknown error occurred.',
 } as const;

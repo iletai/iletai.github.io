@@ -27,18 +27,18 @@ export default function Error({
                         <AlertTriangle className="h-12 w-12 text-red-600" />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                        Có lỗi xảy ra
+                        An error occurred
                     </h1>
                     <p className="text-gray-600 mb-8">
-                        Xin lỗi, đã xảy ra lỗi không mong muốn. Vui lòng thử lại hoặc liên hệ với chúng tôi
-                        nếu vấn đề vẫn tiếp diễn.
+                        Sorry, an unexpected error occurred. Please try again or contact us
+                        if the problem persists.
                     </p>
                 </div>
 
                 {/* Error Details (Development Only) */}
                 {isDevelopment && (
                     <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg text-left">
-                        <h3 className="font-semibold text-red-800 mb-2">Chi tiết lỗi (Development):</h3>
+                        <h3 className="font-semibold text-red-800 mb-2">Error Details (Development):</h3>
                         <p className="text-sm text-red-700 font-mono break-all">
                             {error.message}
                         </p>
@@ -57,7 +57,7 @@ export default function Error({
                         className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         <RefreshCw className="h-5 w-5 mr-2" />
-                        Thử lại
+                        Try again
                     </button>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -66,7 +66,7 @@ export default function Error({
                             className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                         >
                             <Home className="h-4 w-4 mr-2" />
-                            Về trang chủ
+                            Go to homepage
                         </Link>
 
                         <Link
@@ -74,7 +74,7 @@ export default function Error({
                             className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                         >
                             <Mail className="h-4 w-4 mr-2" />
-                            Báo lỗi
+                            Report Error
                         </Link>
                     </div>
                 </div>
@@ -82,16 +82,16 @@ export default function Error({
                 {/* Help Information */}
                 <div className="mt-12 pt-8 border-t border-gray-200">
                     <p className="text-sm text-gray-500 mb-4">
-                        Nếu lỗi vẫn tiếp diễn, hãy liên hệ với tôi qua:
+                        If the error persists, please contact me via:
                     </p>
                     <div className="space-y-2">
                         <p className="text-sm text-gray-600">
                             📧 Email: <a href="mailto:iletai@hotmail.com" className="text-blue-600 hover:text-blue-800">iletai@hotmail.com</a>
                         </p>
                         <p className="text-sm text-gray-600">
-                            💬 Hoặc sử dụng{" "}
+                            💬 Or use{" "}
                             <Link href="/contact" className="text-blue-600 hover:text-blue-800">
-                                form liên hệ
+                                contact form
                             </Link>
                         </p>
                     </div>

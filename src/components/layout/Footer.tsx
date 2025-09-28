@@ -10,16 +10,16 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* About section */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Portfolio</h3>
+                        <h3 className="text-lg font-semibold mb-4">iletai</h3>
                         <p className="text-gray-400 text-sm leading-relaxed">
-                            Website portfolio cá nhân, chia sẻ kiến thức và kinh nghiệm phát triển web.
-                            Được xây dựng với Next.js, TypeScript và Tailwind CSS.
+                            Personal portfolio website, sharing knowledge and web development experience.
+                            Built with Next.js, TypeScript and Tailwind CSS.
                         </p>
                     </div>
 
                     {/* Quick links */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Liên kết nhanh</h3>
+                        <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
                         <ul className="space-y-2">
                             <li>
                                 <Link href="/blog" className="text-gray-400 hover:text-white transition-colors">
@@ -28,17 +28,17 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link href="/projects" className="text-gray-400 hover:text-white transition-colors">
-                                    Dự án
+                                    Projects
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
-                                    Giới thiệu
+                                    About
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                                    Liên hệ
+                                    Contact
                                 </Link>
                             </li>
                         </ul>
@@ -46,7 +46,7 @@ export default function Footer() {
 
                     {/* Social links */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Kết nối</h3>
+                        <h3 className="text-lg font-semibold mb-4">Connect</h3>
                         <div className="flex space-x-4">
                             <a
                                 href="https://github.com"

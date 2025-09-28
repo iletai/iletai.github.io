@@ -44,7 +44,7 @@ export function ThemeToggle() {
                 size="sm"
                 onClick={() => setTheme(isDark ? 'light' : 'dark')}
                 className="w-9 h-9 hover:bg-accent hover:text-accent-foreground transition-colors"
-                aria-label={`Chuyển sang chế độ ${isDark ? 'sáng' : 'tối'}`}
+                aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
             >
                 <AnimatePresence mode="wait" initial={false}>
                     <motion.div

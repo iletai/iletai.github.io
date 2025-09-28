@@ -29,7 +29,7 @@ const mockStats: DashboardStats = {
         {
             id: '1',
             title: 'Portfolio Website Redesign',
-            description: 'Thiết kế lại trang portfolio với Next.js và Tailwind CSS',
+            description: 'Redesign portfolio website with Next.js and Tailwind CSS',
             status: 'completed',
             createdAt: '2024-01-15T10:00:00Z',
             updatedAt: '2024-01-20T15:30:00Z',
@@ -41,7 +41,7 @@ const mockStats: DashboardStats = {
         {
             id: '2',
             title: 'E-commerce Platform',
-            description: 'Xây dựng nền tảng thương mại điện tử với React và Node.js',
+            description: 'Build e-commerce platform with React and Node.js',
             status: 'in-progress',
             createdAt: '2024-01-10T08:00:00Z',
             updatedAt: '2024-01-18T14:20:00Z',
@@ -54,10 +54,10 @@ const mockStats: DashboardStats = {
     recentPosts: [
         {
             id: '1',
-            title: 'Tối ưu hóa Performance cho Next.js',
+            title: 'Performance Optimization for Next.js',
             slug: 'toi-uu-hoa-performance-cho-nextjs',
-            excerpt: 'Các kỹ thuật để tăng tốc độ tải trang cho ứng dụng Next.js',
-            content: 'Nội dung bài viết...',
+            excerpt: 'Techniques to optimize page loading speed for Next.js applications',
+            content: 'Article content...',
             status: 'published',
             updatedAt: '2024-01-22T16:45:00Z',
             publishedAt: '2024-01-23T10:00:00Z',
@@ -65,7 +65,7 @@ const mockStats: DashboardStats = {
             views: 2156,
             author: {
                 id: '1',
-                name: 'Lê Quang Trọng Tài',
+                name: 'Le Quang Trong Tai',
                 avatar: '/avatars/admin.jpg',
                 bio: 'Frontend Developer',
             },
@@ -81,12 +81,12 @@ const mockStats: DashboardStats = {
     recentContacts: [
         {
             id: '1',
-            firstName: 'Nguyễn',
-            lastName: 'Văn A',
+            firstName: 'Nguyen',
+            lastName: 'Van A',
             email: 'nguyenvana@example.com',
             phone: '0123456789',
-            subject: 'Hỏi về dịch vụ phát triển web',
-            message: 'Tôi muốn tìm hiểu về dịch vụ phát triển website của bạn...',
+            subject: 'Inquiry about web development services',
+            message: 'I would like to learn about your website development services...',
             status: 'new',
             createdAt: '2024-01-23T14:30:00Z',
             updatedAt: '2024-01-23T14:30:00Z',
@@ -94,11 +94,11 @@ const mockStats: DashboardStats = {
         },
         {
             id: '2',
-            firstName: 'Trần',
-            lastName: 'Thị B',
+            firstName: 'Tran',
+            lastName: 'Thi B',
             email: 'tranthib@example.com',
-            subject: 'Cần tư vấn mobile app',
-            message: 'Công ty chúng tôi cần phát triển một ứng dụng mobile...',
+            subject: 'Need mobile app consultation',
+            message: 'Our company needs to develop a mobile application...',
             status: 'read',
             createdAt: '2024-01-22T11:15:00Z',
             updatedAt: '2024-01-23T08:30:00Z',
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
 
     const statCards = [
         {
-            name: 'Tổng dự án',
+            name: 'Total Projects',
             value: dashboardData.totalProjects,
             icon: FolderOpen,
             href: '/admin/projects',
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
             changeType: 'positive',
         },
         {
-            name: 'Bài viết',
+            name: 'Articles',
             value: dashboardData.totalBlogPosts,
             icon: FileText,
             href: '/admin/posts',
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
             changeType: 'positive',
         },
         {
-            name: 'Tin nhắn',
+            name: 'Messages',
             value: dashboardData.totalContacts,
             icon: MessageSquare,
             href: '/admin/contacts',
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
             changeType: 'positive',
         },
         {
-            name: 'Lượt xem tháng',
+            name: 'Monthly views',
             value: dashboardData.monthlyViews,
             icon: BarChart3,
             href: '/admin/analytics',
@@ -182,8 +182,8 @@ export default function AdminDashboard() {
                     <div className='px-4 py-5 sm:p-6'>
                         <div className='flex items-center justify-between'>
                             <div>
-                                <h1 className='text-2xl font-bold text-gray-900'>Chào mừng trở lại, {user?.name}! 👋</h1>
-                                <p className='mt-1 text-sm text-gray-600'>Đây là tổng quan về hoạt động website của bạn.</p>
+                                <h1 className='text-2xl font-bold text-gray-900'>Welcome back, {user?.name}! 👋</h1>
+                                <p className='mt-1 text-sm text-gray-600'>This is an overview of your website activity.</p>
                             </div>
                             <div className='flex items-center space-x-3'>
                                 <Link
@@ -191,14 +191,14 @@ export default function AdminDashboard() {
                                     className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                                 >
                                     <Plus className='h-4 w-4 mr-2' />
-                                    Bài viết mới
+                                    New Article
                                 </Link>
                                 <Link
                                     href='/admin/projects/new'
                                     className='inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                                 >
                                     <Plus className='h-4 w-4 mr-2' />
-                                    Dự án mới
+                                    New Project
                                 </Link>
                             </div>
                         </div>
@@ -231,8 +231,7 @@ export default function AdminDashboard() {
                                                 >
                                                     <TrendingUp className='self-center flex-shrink-0 h-4 w-4' />
                                                     <span className='sr-only'>
-                                                        {card.changeType === 'positive' ? 'Tăng' : 'Giảm'} so với tháng
-                                                        trước
+                                                        {card.changeType === 'positive' ? 'Increase' : 'Decrease'} compared to last month
                                                     </span>
                                                     {card.change}
                                                 </div>
@@ -255,12 +254,12 @@ export default function AdminDashboard() {
                     <div className='bg-white shadow rounded-lg'>
                         <div className='px-4 py-5 sm:px-6 border-b border-gray-200'>
                             <div className='flex items-center justify-between'>
-                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Dự án gần đây</h3>
+                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Recent Projects</h3>
                                 <Link
                                     href='/admin/projects'
                                     className='text-sm text-blue-600 hover:text-blue-500 font-medium'
                                 >
-                                    Xem tất cả
+                                    View all
                                 </Link>
                             </div>
                         </div>
@@ -288,7 +287,7 @@ export default function AdminDashboard() {
                                                 {formatDate(project.updatedAt)}
                                                 <span className='mx-2'>•</span>
                                                 <Eye className='flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400' />
-                                                {project.views} lượt xem
+                                                {project.views} views
                                             </div>
                                         </div>
                                         <div className='flex-shrink-0'>
@@ -309,9 +308,9 @@ export default function AdminDashboard() {
                     <div className='bg-white shadow rounded-lg'>
                         <div className='px-4 py-5 sm:px-6 border-b border-gray-200'>
                             <div className='flex items-center justify-between'>
-                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Bài viết gần đây</h3>
+                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Recent Articles</h3>
                                 <Link href='/admin/posts' className='text-sm text-blue-600 hover:text-blue-500 font-medium'>
-                                    Xem tất cả
+                                    View all
                                 </Link>
                             </div>
                         </div>
@@ -337,7 +336,7 @@ export default function AdminDashboard() {
                                                 {formatDate(post.publishedAt)}
                                                 <span className='mx-2'>•</span>
                                                 <Eye className='flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400' />
-                                                {post.views} lượt xem
+                                                {post.views} views
                                             </div>
                                         </div>
                                         <div className='flex-shrink-0'>
@@ -359,9 +358,9 @@ export default function AdminDashboard() {
                 <div className='bg-white shadow rounded-lg'>
                     <div className='px-4 py-5 sm:px-6 border-b border-gray-200'>
                         <div className='flex items-center justify-between'>
-                            <h3 className='text-lg leading-6 font-medium text-gray-900'>Tin nhắn liên hệ mới</h3>
+                            <h3 className='text-lg leading-6 font-medium text-gray-900'>New Contact Messages</h3>
                             <Link href='/admin/contacts' className='text-sm text-blue-600 hover:text-blue-500 font-medium'>
-                                Xem tất cả
+                                View all
                             </Link>
                         </div>
                     </div>

@@ -26,7 +26,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             <div className='min-h-screen flex items-center justify-center bg-gray-50'>
                 <div className='flex flex-col items-center space-y-4'>
                     <Loader2 className='h-8 w-8 animate-spin text-blue-600' />
-                    <p className='text-gray-600'>Đang tải...</p>
+                    <p className='text-gray-600'>Loading...</p>
                 </div>
             </div>
         );

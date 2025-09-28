@@ -49,7 +49,7 @@ export default function RootLayout({
                     <HydrationFix />
                     <Header />
                     <PageTransition>
-                        <main className="min-h-screen pt-16">
+                        <main className="min-h-screen">
                             {children}
                         </main>
                     </PageTransition>

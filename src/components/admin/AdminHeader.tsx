@@ -12,16 +12,16 @@ const mockNotifications = [
     {
         id: '1',
         type: 'contact',
-        title: 'Tin nhắn mới từ khách hàng',
-        message: 'Nguyễn Văn A đã gửi tin nhắn liên hệ',
+        title: 'New message from customer',
+        message: 'John Doe sent a contact message',
         timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
         read: false,
     },
     {
         id: '2',
         type: 'system',
-        title: 'Cập nhật hệ thống',
-        message: 'Hệ thống đã được cập nhật lên phiên bản mới',
+        title: 'System update',
+        message: 'System has been updated to new version',
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
         read: true,
     },
@@ -92,7 +92,7 @@ export default function AdminHeader() {
                             </div>
                             <input
                                 type='text'
-                                placeholder='Tìm kiếm bài viết, dự án, tin nhắn...'
+                                placeholder='Search articles, projects, messages...'
                                 className='block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm'
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -109,7 +109,7 @@ export default function AdminHeader() {
                             className='hidden lg:inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                         >
                             <Home className='h-4 w-4 mr-1.5' />
-                            Trang chủ
+                            Homepage
                         </Link>
 
                         {/* Notifications */}
@@ -129,7 +129,7 @@ export default function AdminHeader() {
                             {showNotifications && (
                                 <div className='absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200'>
                                     <div className='px-4 py-2 border-b border-gray-100'>
-                                        <h3 className='text-sm font-semibold text-gray-900'>Thông báo</h3>
+                                        <h3 className='text-sm font-semibold text-gray-900'>Notifications</h3>
                                     </div>
                                     <div className='max-h-64 overflow-y-auto'>
                                         {mockNotifications.length > 0 ? (
@@ -163,13 +163,13 @@ export default function AdminHeader() {
                                             ))
                                         ) : (
                                             <div className='px-4 py-6 text-center text-sm text-gray-500'>
-                                                Không có thông báo mới
+                                                No new notifications
                                             </div>
                                         )}
                                     </div>
                                     <div className='px-4 py-2 border-t border-gray-100'>
                                         <button className='text-sm text-blue-600 hover:text-blue-800 font-medium'>
-                                            Xem tất cả thông báo
+                                            View all notifications
                                         </button>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@ export default function AdminHeader() {
                                         onClick={() => setShowUserMenu(false)}
                                     >
                                         <User className='mr-3 h-4 w-4 text-gray-400' />
-                                        Hồ sơ cá nhân
+                                        Personal profile
                                     </Link>
 
                                     <Link
@@ -216,7 +216,7 @@ export default function AdminHeader() {
                                         onClick={() => setShowUserMenu(false)}
                                     >
                                         <Settings className='mr-3 h-4 w-4 text-gray-400' />
-                                        Cài đặt
+                                        Settings
                                     </Link>
 
                                     <div className='border-t border-gray-100 mt-1'>
@@ -225,7 +225,7 @@ export default function AdminHeader() {
                                             className='flex items-center w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50'
                                         >
                                             <LogOut className='mr-3 h-4 w-4 text-red-400' />
-                                            Đăng xuất
+                                            Logout
                                         </button>
                                     </div>
                                 </div>
