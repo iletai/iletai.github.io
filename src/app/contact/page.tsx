@@ -52,7 +52,7 @@ export default function ContactPage() {
                                             </div>
                                             <div className="ml-4">
                                                 <h3 className="text-lg font-medium text-gray-900">Email</h3>
-                                                <p className="text-gray-600">your.email@example.com</p>
+                                                <p className="text-gray-600">iletai@hotmail.com</p>
                                                 <p className="text-sm text-gray-500 mt-1">
                                                     Phản hồi trong vòng 24 giờ
                                                 </p>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                                             </div>
                                             <div className="ml-4">
                                                 <h3 className="text-lg font-medium text-gray-900">Điện thoại</h3>
-                                                <p className="text-gray-600">+84 xxx xxx xxx</p>
+                                                <p className="text-gray-600">+84 326817280</p>
                                                 <p className="text-sm text-gray-500 mt-1">
                                                     Thứ 2 - Thứ 6, 9:00 - 18:00
                                                 </p>
@@ -83,7 +83,7 @@ export default function ContactPage() {
                                             <div className="ml-4">
                                                 <h3 className="text-lg font-medium text-gray-900">Địa chỉ</h3>
                                                 <p className="text-gray-600">
-                                                    Ho Chi Minh City, Vietnam
+                                                    Da Nang City, Vietnam
                                                 </p>
                                                 <p className="text-sm text-gray-500 mt-1">
                                                     Có thể làm việc remote hoặc on-site
@@ -123,7 +123,7 @@ export default function ContactPage() {
                                         </a>
 
                                         <a
-                                            href="https://twitter.com/yourusername"
+                                            href="https://twitter.com/tailqt"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:bg-blue-50 transition-colors group"

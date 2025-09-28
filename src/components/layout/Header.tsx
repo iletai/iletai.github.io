@@ -1,5 +1,6 @@
 'use client';
 
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
@@ -35,8 +36,8 @@ export default function Header() {
             className={cn(
                 'fixed top-0 w-full transition-all duration-300 z-50',
                 isScrolled
-                    ? 'bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm'
-                    : 'bg-white/80 backdrop-blur-sm'
+                    ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm'
+                    : 'bg-background/80 backdrop-blur-sm'
             )}
             initial={{ y: -100 }}
             animate={{ y: 0 }}
@@ -50,7 +51,7 @@ export default function Header() {
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.2 }}
                     >
-                        <Link href='/' className='text-xl font-bold text-gray-900'>
+                        <Link href='/' className='text-xl font-bold text-foreground'>
                             Portfolio
                         </Link>
                     </motion.div>
@@ -71,7 +72,7 @@ export default function Header() {
                                                 asChild
                                                 className={cn(
                                                     'group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50',
-                                                    'text-gray-700 hover:text-gray-900 hover:bg-gray-100/50'
+                                                    'text-muted-foreground hover:text-foreground'
                                                 )}
                                             >
                                                 <Link href={item.href}>
@@ -83,6 +84,9 @@ export default function Header() {
                                 ))}
                             </NavigationMenuList>
                         </NavigationMenu>
+
+                        {/* Theme Toggle */}
+                        <ThemeToggle />
 
                         {/* CTA Buttons */}
                         <div className="flex items-center space-x-2">
@@ -117,7 +121,7 @@ export default function Header() {
                             variant="ghost"
                             size="sm"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className='text-gray-700 hover:text-gray-900 hover:bg-gray-100/50'
+                            className='text-muted-foreground hover:text-foreground hover:bg-accent/50'
                             aria-expanded={isMenuOpen}
                         >
                             <span className='sr-only'>Mở menu chính</span>
@@ -151,7 +155,7 @@ export default function Header() {
                             transition={{ duration: 0.3, ease: 'easeInOut' }}
                         >
                             <motion.div
-                                className='px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/95 backdrop-blur-md border-t border-gray-200'
+                                className='px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/95 backdrop-blur-md border-t border-border'
                                 initial={{ y: -20 }}
                                 animate={{ y: 0 }}
                                 transition={{ duration: 0.3, delay: 0.1 }}
@@ -166,7 +170,7 @@ export default function Header() {
                                         <Button
                                             variant="ghost"
                                             asChild
-                                            className='w-full justify-start text-gray-700 hover:text-gray-900 hover:bg-gray-100/50'
+                                            className='w-full justify-start text-muted-foreground hover:text-foreground hover:bg-accent/50'
                                             onClick={() => setIsMenuOpen(false)}
                                         >
                                             <Link href={item.href}>
@@ -175,6 +179,16 @@ export default function Header() {
                                         </Button>
                                     </motion.div>
                                 ))}
+
+                                {/* Mobile Theme Toggle */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.3, delay: 0.1 + navigation.length * 0.05 }}
+                                    className="flex justify-center pt-2 border-t border-border"
+                                >
+                                    <ThemeToggle />
+                                </motion.div>
                             </motion.div>
                         </motion.div>
                     )}

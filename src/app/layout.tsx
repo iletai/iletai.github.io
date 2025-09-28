@@ -2,6 +2,7 @@ import HydrationFix from "@/components/HydrationFix";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import PageTransition from "@/components/motion/PageTransition";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -42,16 +43,18 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="vi" className={inter.variable}>
-            <body className="font-inter antialiased bg-white" suppressHydrationWarning={true}>
-                <HydrationFix />
-                <Header />
-                <PageTransition>
-                    <main className="min-h-screen pt-16">
-                        {children}
-                    </main>
-                </PageTransition>
-                <Footer />
+        <html lang="vi" className={inter.variable} suppressHydrationWarning>
+            <body className="font-inter antialiased bg-background text-foreground" suppressHydrationWarning={true}>
+                <ThemeProvider>
+                    <HydrationFix />
+                    <Header />
+                    <PageTransition>
+                        <main className="min-h-screen pt-16">
+                            {children}
+                        </main>
+                    </PageTransition>
+                    <Footer />
+                </ThemeProvider>
             </body>
         </html>
     );

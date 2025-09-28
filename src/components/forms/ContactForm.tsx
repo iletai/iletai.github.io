@@ -411,7 +411,7 @@ export default function ContactFormComponent({
                             type="email"
                             value={formState.data.email}
                             onChange={handleInputChange}
-                            placeholder="your@email.com"
+                            placeholder="youremail@email.com"
                             disabled={formState.isSubmitting}
                             className={formState.errors.email ? 'border-red-300' : ''}
                         />
