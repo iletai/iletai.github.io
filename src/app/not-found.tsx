@@ -16,10 +16,10 @@ export default function NotFound() {
                     <div className="text-9xl font-bold text-blue-600 opacity-20">404</div>
                     <div className="relative -mt-16">
                         <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                            Trang không tồn tại
+                            Page Not Found
                         </h1>
                         <p className="text-gray-600 mb-8">
-                            Xin lỗi, trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.
+                            Sorry, the page you are looking for does not exist or has been moved.
                         </p>
                     </div>
                 </div>
@@ -31,7 +31,7 @@ export default function NotFound() {
                         className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         <Home className="h-5 w-5 mr-2" />
-                        Về trang chủ
+                        Go to homepage
                     </Link>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -40,7 +40,7 @@ export default function NotFound() {
                             className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                         >
                             <ArrowLeft className="h-4 w-4 mr-2" />
-                            Quay lại
+                            Go back
                         </button>
 
                         <Link
@@ -55,25 +55,25 @@ export default function NotFound() {
 
                 {/* Helpful Links */}
                 <div className="mt-12 pt-8 border-t border-gray-200">
-                    <p className="text-sm text-gray-500 mb-4">Có thể bạn đang tìm:</p>
+                    <p className="text-sm text-gray-500 mb-4">You might be looking for:</p>
                     <div className="grid grid-cols-1 gap-2">
                         <Link
                             href="/projects"
                             className="text-blue-600 hover:text-blue-800 text-sm"
                         >
-                            → Xem các dự án của tôi
+                            → View my projects
                         </Link>
                         <Link
                             href="/blog"
                             className="text-blue-600 hover:text-blue-800 text-sm"
                         >
-                            → Đọc bài viết trên blog
+                            → Read blog articles
                         </Link>
                         <Link
                             href="/contact"
                             className="text-blue-600 hover:text-blue-800 text-sm"
                         >
-                            → Liên hệ với tôi
+                            → Contact me
                         </Link>
                     </div>
                 </div>

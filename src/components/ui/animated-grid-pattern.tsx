@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 interface AnimatedGridPatternProps {
     width?: number;
@@ -25,9 +25,9 @@ export default function AnimatedGridPattern({
     size = 20,
     ...props
 }: AnimatedGridPatternProps) {
-    const [grid, setGrid] = useState<Array<{ x: number; y: number; opacity: number }>>([]);
+    const [grid, setGrid] = useState<Array<{ x: number; y: number; opacity: number; delay: number }>>([]);
 
-    const id = `grid-pattern-${Math.random().toString(36).substr(2, 9)}`;
+    const id = useId();
 
     useEffect(() => {
         const generateGrid = () => {
@@ -37,6 +37,7 @@ export default function AnimatedGridPattern({
                     x: Math.floor(Math.random() * (width / size)) * size,
                     y: Math.floor(Math.random() * (height / size)) * size,
                     opacity: Math.random() * maxOpacity,
+                    delay: Math.random() * repeatDelay,
                 });
             }
             setGrid(newGrid);
@@ -87,7 +88,7 @@ export default function AnimatedGridPattern({
                     opacity={square.opacity}
                     className="animate-pulse"
                     style={{
-                        animationDelay: `${Math.random() * 2}s`,
+                        animationDelay: `${square.delay}s`,
                         animationDuration: `${duration}s`,
                     }}
                 />

@@ -24,43 +24,43 @@ const navigation = [
         name: 'Dashboard',
         href: '/admin/dashboard',
         icon: LayoutDashboard,
-        description: 'Tổng quan hệ thống',
+        description: 'System overview',
     },
     {
-        name: 'Bài viết',
+        name: 'Articles',
         href: '/admin/posts',
         icon: FileText,
-        description: 'Quản lý blog posts',
+        description: 'Manage blog posts',
     },
     {
-        name: 'Dự án',
+        name: 'Projects',
         href: '/admin/projects',
         icon: FolderOpen,
-        description: 'Quản lý dự án',
+        description: 'Manage projects',
     },
     {
-        name: 'Tin nhắn',
+        name: 'Messages',
         href: '/admin/contacts',
         icon: MessageSquare,
-        description: 'Tin nhắn liên hệ',
+        description: 'Contact messages',
     },
     {
-        name: 'Thống kê',
+        name: 'Statistics',
         href: '/admin/analytics',
         icon: BarChart3,
-        description: 'Phân tích traffic',
+        description: 'Traffic analysis',
     },
     {
-        name: 'Người dùng',
+        name: 'Users',
         href: '/admin/users',
         icon: Users,
-        description: 'Quản lý admin',
+        description: 'Admin management',
     },
     {
-        name: 'Cài đặt',
+        name: 'Settings',
         href: '/admin/settings',
         icon: Settings,
-        description: 'Cấu hình hệ thống',
+        description: 'System configuration',
     },
 ];
 
@@ -182,7 +182,7 @@ export default function AdminSidebar() {
                             className='inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-blue-600 hover:bg-blue-700'
                         >
                             <Home className='h-4 w-4 mr-1' />
-                            Trang chủ
+                            Homepage
                         </Link>
                     </div>
                 </div>

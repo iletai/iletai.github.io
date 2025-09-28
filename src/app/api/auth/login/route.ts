@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json(
 				{
 					success: false,
-					message: 'Email và mật khẩu không được để trống',
+					message: 'Email and password are required',
 				},
 				{ status: 400 }
 			);
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json(
 				{
 					success: false,
-					message: 'Email hoặc mật khẩu không chính xác',
+					message: 'Invalid email or password',
 				},
 				{ status: 401 }
 			);
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
 		return NextResponse.json({
 			success: true,
-			message: 'Đăng nhập thành công',
+			message: 'Login successful',
 			data: {
 				user,
 				session,
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: 'Lỗi server. Vui lòng thử lại sau.',
+				message: 'Server error. Please try again later.',
 			},
 			{ status: 500 }
 		);

@@ -30,15 +30,15 @@ export default function AdminLoginPage() {
         const errors: Record<string, string> = {};
 
         if (!formData.email.trim()) {
-            errors.email = 'Vui lòng nhập email';
+            errors.email = 'Please enter email';
         } else if (!isValidEmail(formData.email)) {
-            errors.email = 'Email không hợp lệ';
+            errors.email = 'Invalid email address';
         }
 
         if (!formData.password.trim()) {
-            errors.password = 'Vui lòng nhập mật khẩu';
+            errors.password = 'Please enter password';
         } else if (formData.password.length < 6) {
-            errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+            errors.password = 'Password must be at least 6 characters';
         }
 
         setFormErrors(errors);
@@ -57,7 +57,7 @@ export default function AdminLoginPage() {
             await login(formData);
             router.push(redirectTo);
         } catch (error) {
-            setLoginError(error instanceof Error ? error.message : 'Đăng nhập thất bại. Vui lòng thử lại.');
+            setLoginError(error instanceof Error ? error.message : 'Login failed. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
             <div className='min-h-screen flex items-center justify-center bg-gray-50'>
                 <div className='flex flex-col items-center space-y-4'>
                     <Loader2 className='h-8 w-8 animate-spin text-blue-600' />
-                    <p className='text-gray-600'>Đang kiểm tra xác thực...</p>
+                    <p className='text-gray-600'>Checking authentication...</p>
                 </div>
             </div>
         );
@@ -99,8 +99,8 @@ export default function AdminLoginPage() {
                                 Portfolio Admin
                             </h1>
                         </Link>
-                        <h2 className='mt-6 text-2xl font-semibold text-gray-900'>Đăng nhập quản trị</h2>
-                        <p className='mt-2 text-sm text-gray-600'>Truy cập vào bảng điều khiển quản trị website</p>
+                        <h2 className='mt-6 text-2xl font-semibold text-gray-900'>Admin Login</h2>
+                        <p className='mt-2 text-sm text-gray-600'>Access website admin control panel</p>
                     </div>
 
                     {/* Login Form */}
@@ -148,7 +148,7 @@ export default function AdminLoginPage() {
                             {/* Password Field */}
                             <div>
                                 <label htmlFor='password' className='block text-sm font-medium text-gray-700 mb-2'>
-                                    Mật khẩu
+                                    Password
                                 </label>
                                 <div className='relative'>
                                     <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
@@ -166,7 +166,7 @@ export default function AdminLoginPage() {
                                                 ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
                                                 : 'border-gray-300'
                                         )}
-                                        placeholder='Nhập mật khẩu'
+                                        placeholder='Enter password'
                                         value={formData.password}
                                         onChange={(e) => handleInputChange('password', e.target.value)}
                                     />
@@ -197,7 +197,7 @@ export default function AdminLoginPage() {
                                         onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
                                     />
                                     <label htmlFor='remember-me' className='ml-2 block text-sm text-gray-700'>
-                                        Ghi nhớ đăng nhập
+                                        Remember me
                                     </label>
                                 </div>
 
@@ -207,10 +207,10 @@ export default function AdminLoginPage() {
                                         className='font-medium text-blue-600 hover:text-blue-500 transition-colors'
                                         onClick={() => {
                                             // TODO: Implement forgot password
-                                            alert('Tính năng quên mật khẩu sẽ được bổ sung sau');
+                                            alert('Forgot password feature will be added later');
                                         }}
                                     >
-                                        Quên mật khẩu?
+                                        Forgot password?
                                     </button>
                                 </div>
                             </div>
@@ -228,10 +228,10 @@ export default function AdminLoginPage() {
                                     {isSubmitting ? (
                                         <>
                                             <Loader2 className='h-4 w-4 mr-2 animate-spin' />
-                                            Đang đăng nhập...
+                                            Logging in...
                                         </>
                                     ) : (
-                                        'Đăng nhập'
+                                        'Login'
                                     )}
                                 </button>
                             </div>
@@ -240,7 +240,7 @@ export default function AdminLoginPage() {
                         {/* Footer Links */}
                         <div className='mt-6 text-center'>
                             <Link href='/' className='text-sm text-gray-600 hover:text-blue-600 transition-colors'>
-                                ← Quay về trang chủ
+                                ← Back to homepage
                             </Link>
                         </div>
                     </div>
@@ -248,10 +248,10 @@ export default function AdminLoginPage() {
                     {/* Demo Credentials */}
                     {process.env.NODE_ENV === 'development' && (
                         <div className='bg-yellow-50 border border-yellow-200 rounded-md p-4'>
-                            <h3 className='text-sm font-medium text-yellow-800 mb-2'>Tài khoản demo:</h3>
+                            <h3 className='text-sm font-medium text-yellow-800 mb-2'>Demo account:</h3>
                             <div className='text-sm text-yellow-700 space-y-1'>
                                 <p>Email: admin@demo.com</p>
-                                <p>Mật khẩu: admin123</p>
+                                <p>Password: admin123</p>
                             </div>
                         </div>
                     )}

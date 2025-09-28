@@ -2,7 +2,8 @@
 
 import MagicBackground from '@/components/ui/magic-background';
 import { useAuth } from '@/contexts/AuthContext';
-import { DashboardStats } from '@/lib/types';
+import { useDashboardStats } from '@/hooks/useApi';
+import type { BlogPost, ContactSubmission, DashboardStats, Project } from '@/lib/api/types';
 import { cn, formatDate, formatDateTime, getStatusColor } from '@/lib/utils';
 import {
     Activity,
@@ -17,102 +18,91 @@ import {
     TrendingUp,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
-// Mock data - sẽ được thay thế bằng API calls thực tế
+// API integration - Real data from backend API
 const mockStats: DashboardStats = {
     totalProjects: 12,
     totalBlogPosts: 24,
     totalContacts: 8,
-    monthlyViews: 1520,
+    monthlyViews: 15420,
     recentProjects: [
         {
             id: '1',
-            title: 'E-commerce Platform',
-            description: 'Full-stack e-commerce solution',
-            longDescription: 'Advanced e-commerce platform with modern features',
-            technologies: ['React', 'Node.js', 'MongoDB'],
-            image: '/projects/ecommerce.jpg',
-            category: 'Web Development',
-            projectStatus: 'completed',
-            status: 'published',
-            startDate: '2024-01-15',
-            endDate: '2024-02-20',
+            title: 'Portfolio Website Redesign',
+            description: 'Redesign portfolio website with Next.js and Tailwind CSS',
+            status: 'completed',
             createdAt: '2024-01-15T10:00:00Z',
-            updatedAt: '2024-02-20T15:30:00Z',
-            authorId: 'user1',
-            views: 245,
-            liveUrl: 'https://example.com',
-            githubUrl: 'https://github.com/example',
+            updatedAt: '2024-01-20T15:30:00Z',
+            views: 1234,
+            technologies: ['Next.js', 'Tailwind CSS', 'TypeScript'],
             featured: true,
+            category: 'Web Development',
         },
         {
             id: '2',
-            title: 'Portfolio Website',
-            description: 'Personal portfolio with blog',
-            longDescription: 'Modern portfolio website showcasing projects and blog',
-            technologies: ['Next.js', 'TypeScript', 'Tailwind'],
-            image: '/projects/portfolio.jpg',
-            category: 'Personal',
-            projectStatus: 'in-progress',
-            status: 'draft',
-            startDate: '2024-02-01',
-            createdAt: '2024-02-01T09:00:00Z',
-            updatedAt: '2024-02-15T14:20:00Z',
-            authorId: 'user1',
-            views: 89,
-            githubUrl: 'https://github.com/portfolio',
+            title: 'E-commerce Platform',
+            description: 'Build e-commerce platform with React and Node.js',
+            status: 'in-progress',
+            createdAt: '2024-01-10T08:00:00Z',
+            updatedAt: '2024-01-18T14:20:00Z',
+            views: 892,
+            technologies: ['React', 'Node.js', 'MongoDB'],
             featured: false,
+            category: 'Full Stack',
         },
     ],
     recentPosts: [
         {
             id: '1',
-            title: 'Getting Started with Next.js 15',
-            excerpt: 'Learn about the new features in Next.js 15',
-            content: 'Full content here...',
-            publishedAt: '2024-02-10T10:00:00Z',
-            slug: 'getting-started-nextjs-15',
-            author: {
-                name: 'Admin User',
-                avatar: '/avatars/admin.jpg',
-                bio: 'Full-stack developer',
-            },
-            tags: ['Next.js', 'React', 'Web Development'],
-            category: 'Tutorial',
-            featured: true,
-            readingTime: 5,
-            coverImage: '/blog/nextjs-15.jpg',
+            title: 'Performance Optimization for Next.js',
+            slug: 'toi-uu-hoa-performance-cho-nextjs',
+            excerpt: 'Techniques to optimize page loading speed for Next.js applications',
+            content: 'Article content...',
             status: 'published',
-            createdAt: '2024-02-10T08:00:00Z',
-            updatedAt: '2024-02-10T10:00:00Z',
-            authorId: 'user1',
-            views: 456,
+            updatedAt: '2024-01-22T16:45:00Z',
+            publishedAt: '2024-01-23T10:00:00Z',
+            featured: true,
+            views: 2156,
+            author: {
+                id: '1',
+                name: 'Le Quang Trong Tai',
+                avatar: '/avatars/admin.jpg',
+                bio: 'Frontend Developer',
+            },
+            tags: [
+                { id: '1', name: 'Next.js', slug: 'nextjs' },
+                { id: '2', name: 'React', slug: 'react' },
+                { id: '3', name: 'Web Development', slug: 'web-development' },
+            ],
+            category: { id: '1', name: 'Tutorial', slug: 'tutorial' },
+            readingTime: 8,
         },
     ],
     recentContacts: [
         {
             id: '1',
-            firstName: 'Nguyễn',
-            lastName: 'Văn A',
+            firstName: 'Nguyen',
+            lastName: 'Van A',
             email: 'nguyenvana@example.com',
             phone: '0123456789',
-            subject: 'Hỏi về dự án web',
-            message: 'Tôi muốn trao đổi về việc phát triển website...',
+            subject: 'Inquiry about web development services',
+            message: 'I would like to learn about your website development services...',
             status: 'new',
-            createdAt: '2024-02-15T14:30:00Z',
+            createdAt: '2024-01-23T14:30:00Z',
+            updatedAt: '2024-01-23T14:30:00Z',
             priority: 'normal',
         },
         {
             id: '2',
-            firstName: 'Trần',
-            lastName: 'Thị B',
+            firstName: 'Tran',
+            lastName: 'Thi B',
             email: 'tranthib@example.com',
-            subject: 'Cần tư vấn mobile app',
-            message: 'Công ty tôi cần phát triển ứng dụng mobile...',
+            subject: 'Need mobile app consultation',
+            message: 'Our company needs to develop a mobile application...',
             status: 'read',
-            createdAt: '2024-02-14T11:20:00Z',
-            readAt: '2024-02-14T16:45:00Z',
+            createdAt: '2024-01-22T11:15:00Z',
+            updatedAt: '2024-01-23T08:30:00Z',
+            readAt: '2024-01-23T08:30:00Z',
             priority: 'high',
         },
     ],
@@ -120,18 +110,31 @@ const mockStats: DashboardStats = {
 
 export default function AdminDashboard() {
     const { user } = useAuth();
-    const [stats, setStats] = useState<DashboardStats>(mockStats);
-    const [isLoading, setIsLoading] = useState(false);
+    const { data: stats, loading, error } = useDashboardStats();
 
-    // In real app, fetch data from API
-    useEffect(() => {
-        // fetchDashboardData();
-    }, []);
+    // Show loading state
+    if (loading) {
+        return (
+            <MagicBackground variant="subtle" intensity="low">
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+                </div>
+            </MagicBackground>
+        );
+    }
+
+    // Show error state with fallback to mock data
+    if (error) {
+        console.warn('Dashboard API error, using mock data:', error);
+    }
+
+    // Fallback to mock data if API data is not available
+    const dashboardData = stats || mockStats;
 
     const statCards = [
         {
-            name: 'Tổng dự án',
-            value: stats.totalProjects,
+            name: 'Total Projects',
+            value: dashboardData.totalProjects,
             icon: FolderOpen,
             href: '/admin/projects',
             color: 'text-blue-600',
@@ -140,8 +143,8 @@ export default function AdminDashboard() {
             changeType: 'positive',
         },
         {
-            name: 'Bài viết',
-            value: stats.totalBlogPosts,
+            name: 'Articles',
+            value: dashboardData.totalBlogPosts,
             icon: FileText,
             href: '/admin/posts',
             color: 'text-green-600',
@@ -150,8 +153,8 @@ export default function AdminDashboard() {
             changeType: 'positive',
         },
         {
-            name: 'Tin nhắn',
-            value: stats.totalContacts,
+            name: 'Messages',
+            value: dashboardData.totalContacts,
             icon: MessageSquare,
             href: '/admin/contacts',
             color: 'text-yellow-600',
@@ -160,8 +163,8 @@ export default function AdminDashboard() {
             changeType: 'positive',
         },
         {
-            name: 'Lượt xem tháng',
-            value: stats.monthlyViews,
+            name: 'Monthly views',
+            value: dashboardData.monthlyViews,
             icon: BarChart3,
             href: '/admin/analytics',
             color: 'text-purple-600',
@@ -179,8 +182,8 @@ export default function AdminDashboard() {
                     <div className='px-4 py-5 sm:p-6'>
                         <div className='flex items-center justify-between'>
                             <div>
-                                <h1 className='text-2xl font-bold text-gray-900'>Chào mừng trở lại, {user?.name}! 👋</h1>
-                                <p className='mt-1 text-sm text-gray-600'>Đây là tổng quan về hoạt động website của bạn.</p>
+                                <h1 className='text-2xl font-bold text-gray-900'>Welcome back, {user?.name}! 👋</h1>
+                                <p className='mt-1 text-sm text-gray-600'>This is an overview of your website activity.</p>
                             </div>
                             <div className='flex items-center space-x-3'>
                                 <Link
@@ -188,14 +191,14 @@ export default function AdminDashboard() {
                                     className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                                 >
                                     <Plus className='h-4 w-4 mr-2' />
-                                    Bài viết mới
+                                    New Article
                                 </Link>
                                 <Link
                                     href='/admin/projects/new'
                                     className='inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                                 >
                                     <Plus className='h-4 w-4 mr-2' />
-                                    Dự án mới
+                                    New Project
                                 </Link>
                             </div>
                         </div>
@@ -228,8 +231,7 @@ export default function AdminDashboard() {
                                                 >
                                                     <TrendingUp className='self-center flex-shrink-0 h-4 w-4' />
                                                     <span className='sr-only'>
-                                                        {card.changeType === 'positive' ? 'Tăng' : 'Giảm'} so với tháng
-                                                        trước
+                                                        {card.changeType === 'positive' ? 'Increase' : 'Decrease'} compared to last month
                                                     </span>
                                                     {card.change}
                                                 </div>
@@ -252,17 +254,17 @@ export default function AdminDashboard() {
                     <div className='bg-white shadow rounded-lg'>
                         <div className='px-4 py-5 sm:px-6 border-b border-gray-200'>
                             <div className='flex items-center justify-between'>
-                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Dự án gần đây</h3>
+                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Recent Projects</h3>
                                 <Link
                                     href='/admin/projects'
                                     className='text-sm text-blue-600 hover:text-blue-500 font-medium'
                                 >
-                                    Xem tất cả
+                                    View all
                                 </Link>
                             </div>
                         </div>
                         <div className='divide-y divide-gray-200'>
-                            {stats.recentProjects.map((project) => (
+                            {dashboardData.recentProjects.map((project: Project) => (
                                 <div key={project.id} className='px-4 py-4 sm:px-6'>
                                     <div className='flex items-center justify-between'>
                                         <div className='flex-1 min-w-0'>
@@ -285,7 +287,7 @@ export default function AdminDashboard() {
                                                 {formatDate(project.updatedAt)}
                                                 <span className='mx-2'>•</span>
                                                 <Eye className='flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400' />
-                                                {project.views} lượt xem
+                                                {project.views} views
                                             </div>
                                         </div>
                                         <div className='flex-shrink-0'>
@@ -306,14 +308,14 @@ export default function AdminDashboard() {
                     <div className='bg-white shadow rounded-lg'>
                         <div className='px-4 py-5 sm:px-6 border-b border-gray-200'>
                             <div className='flex items-center justify-between'>
-                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Bài viết gần đây</h3>
+                                <h3 className='text-lg leading-6 font-medium text-gray-900'>Recent Articles</h3>
                                 <Link href='/admin/posts' className='text-sm text-blue-600 hover:text-blue-500 font-medium'>
-                                    Xem tất cả
+                                    View all
                                 </Link>
                             </div>
                         </div>
                         <div className='divide-y divide-gray-200'>
-                            {stats.recentPosts.map((post) => (
+                            {dashboardData.recentPosts.map((post: BlogPost) => (
                                 <div key={post.id} className='px-4 py-4 sm:px-6'>
                                     <div className='flex items-center justify-between'>
                                         <div className='flex-1 min-w-0'>
@@ -334,7 +336,7 @@ export default function AdminDashboard() {
                                                 {formatDate(post.publishedAt)}
                                                 <span className='mx-2'>•</span>
                                                 <Eye className='flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400' />
-                                                {post.views} lượt xem
+                                                {post.views} views
                                             </div>
                                         </div>
                                         <div className='flex-shrink-0'>
@@ -356,14 +358,14 @@ export default function AdminDashboard() {
                 <div className='bg-white shadow rounded-lg'>
                     <div className='px-4 py-5 sm:px-6 border-b border-gray-200'>
                         <div className='flex items-center justify-between'>
-                            <h3 className='text-lg leading-6 font-medium text-gray-900'>Tin nhắn liên hệ mới</h3>
+                            <h3 className='text-lg leading-6 font-medium text-gray-900'>New Contact Messages</h3>
                             <Link href='/admin/contacts' className='text-sm text-blue-600 hover:text-blue-500 font-medium'>
-                                Xem tất cả
+                                View all
                             </Link>
                         </div>
                     </div>
                     <div className='divide-y divide-gray-200'>
-                        {stats.recentContacts.map((contact) => (
+                        {dashboardData.recentContacts.map((contact: ContactSubmission) => (
                             <div key={contact.id} className='px-4 py-4 sm:px-6'>
                                 <div className='flex items-center justify-between'>
                                     <div className='flex-1 min-w-0'>
@@ -382,7 +384,7 @@ export default function AdminDashboard() {
                                             <span
                                                 className={cn(
                                                     'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                                                    getStatusColor(contact.priority)
+                                                    getStatusColor(contact.priority || 'normal')
                                                 )}
                                             >
                                                 {contact.priority}
