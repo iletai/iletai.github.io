@@ -116,8 +116,11 @@ export default function Header() {
                         rgba(255, 255, 255, 0.10) 100%
                     );
                     border-color: rgba(255, 255, 255, 0.25);
-                    transform: translateY(-4px) scale(1.1);
-                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+                    transform: translateY(-6px) scale(1.15);
+                    box-shadow:
+                        0 8px 25px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.1),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.3);
                 }
 
                 .mobile-dock {
@@ -260,6 +263,27 @@ export default function Header() {
                     );
                     border-color: rgba(255, 255, 255, 0.18);
                 }
+
+                .dock-tooltip {
+                    position: absolute;
+                    top: -45px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 6px 12px;
+                    background: linear-gradient(135deg,
+                        rgba(0, 0, 0, 0.85) 0%,
+                        rgba(20, 20, 20, 0.90) 100%
+                    );
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 500;
+                    border-radius: 8px;
+                    border: 1px solid rgba(255, 255, 255, 0.15);
+                    backdrop-filter: blur(12px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                    white-space: nowrap;
+                    z-index: 60;
+                }
             `}</style>
 
             {/* Desktop macOS Dock */}
@@ -270,22 +294,43 @@ export default function Header() {
                             {/* Logo */}
                             <motion.div
                                 className="dock-item"
-                                whileHover={{ scale: 1.1, y: -4 }}
-                                whileTap={{ scale: 1.05, y: -2 }}
+                                initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                transition={{
+                                    duration: 0.6,
+                                    ease: [0.34, 1.56, 0.64, 1],
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 25
+                                }}
+                                whileHover={{
+                                    scale: 1.15,
+                                    y: -6,
+                                    rotate: 360,
+                                    transition: { duration: 0.4, ease: "easeInOut" }
+                                }}
+                                whileTap={{ scale: 1.08, y: -3 }}
                                 onHoverStart={() => setHoveredItem('logo')}
                                 onHoverEnd={() => setHoveredItem(null)}
                             >
                                 <Link href="/" className="flex items-center justify-center w-full h-full relative">
-                                    <span className="text-xl font-bold bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                                    <motion.span
+                                        className="text-xl font-bold bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+                                        animate={hoveredItem === 'logo' ? {
+                                            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                                            transition: { duration: 1, repeat: Infinity }
+                                        } : {}}
+                                    >
                                         iL
-                                    </span>
+                                    </motion.span>
                                     <AnimatePresence>
                                         {hoveredItem === 'logo' && (
                                             <motion.div
                                                 className="dock-tooltip"
-                                                initial={{ opacity: 0, y: 5 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: 5 }}
+                                                initial={{ opacity: 0, y: 8, scale: 0.9 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 8, scale: 0.9 }}
+                                                transition={{ duration: 0.2, ease: "easeOut" }}
                                             >
                                                 Home
                                             </motion.div>
@@ -299,27 +344,61 @@ export default function Header() {
                             {/* Navigation Items */}
                             {dockItems.map((item, index) => {
                                 const Icon = item.icon;
+                                const isActive = pathname === item.href;
                                 return (
                                     <motion.div
                                         key={item.name}
-                                        className="dock-item"
-                                        initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        className={`dock-item ${isActive ? 'gradient' : ''}`}
+                                        initial={{ opacity: 0, y: 20, scale: 0.8, rotateX: -45 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                                         transition={{
-                                            delay: index * 0.05,
-                                            duration: 0.4,
-                                            ease: [0.34, 1.56, 0.64, 1]
+                                            delay: index * 0.08,
+                                            duration: 0.5,
+                                            ease: [0.34, 1.56, 0.64, 1],
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
                                         }}
-                                        whileHover={{ scale: 1.1, y: -4 }}
-                                        whileTap={{ scale: 1.05, y: -2 }}
+                                        whileHover={{
+                                            scale: 1.15,
+                                            y: -6,
+                                            rotateY: 5,
+                                            transition: { duration: 0.2, ease: "easeOut" }
+                                        }}
+                                        whileTap={{
+                                            scale: 1.08,
+                                            y: -3,
+                                            transition: { duration: 0.1 }
+                                        }}
                                         onHoverStart={() => setHoveredItem(item.name)}
                                         onHoverEnd={() => setHoveredItem(null)}
                                     >
                                         <Link href={item.href} className="flex flex-col items-center justify-center w-full h-full relative">
-                                            <Icon size={20} className="text-foreground/80 mb-1" />
-                                            <span className="text-xs font-medium text-foreground/70">
+                                            <motion.div
+                                                animate={hoveredItem === item.name ? {
+                                                    scale: 1.1,
+                                                    rotate: [0, -5, 5, 0],
+                                                    transition: { duration: 0.3, ease: "easeInOut" }
+                                                } : { scale: 1, rotate: 0 }}
+                                            >
+                                                <Icon size={20} className={`mb-1 transition-colors duration-200 ${isActive ? 'text-white' : 'text-foreground/80'}`} />
+                                            </motion.div>
+                                            <span className={`text-xs font-medium transition-colors duration-200 ${isActive ? 'text-white/90' : 'text-foreground/70'}`}>
                                                 {item.name}
                                             </span>
+                                            <AnimatePresence>
+                                                {hoveredItem === item.name && (
+                                                    <motion.div
+                                                        className="dock-tooltip"
+                                                        initial={{ opacity: 0, y: 8, scale: 0.9 }}
+                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                        exit={{ opacity: 0, y: 8, scale: 0.9 }}
+                                                        transition={{ duration: 0.2, ease: "easeOut" }}
+                                                    >
+                                                        {item.name}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         </Link>
                                     </motion.div>
                                 );
@@ -330,8 +409,23 @@ export default function Header() {
                             {/* Theme Toggle */}
                             <motion.div
                                 className="dock-item"
-                                whileHover={{ scale: 1.1, y: -4 }}
-                                whileTap={{ scale: 1.05, y: -2 }}
+                                initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{
+                                    delay: dockItems.length * 0.08 + 0.1,
+                                    duration: 0.5,
+                                    ease: [0.34, 1.56, 0.64, 1],
+                                    type: "spring",
+                                    stiffness: 260,
+                                    damping: 20
+                                }}
+                                whileHover={{
+                                    scale: 1.15,
+                                    y: -6,
+                                    rotate: 180,
+                                    transition: { duration: 0.3, ease: "easeOut" }
+                                }}
+                                whileTap={{ scale: 1.08, y: -3 }}
                             >
                                 <ThemeToggle />
                             </motion.div>

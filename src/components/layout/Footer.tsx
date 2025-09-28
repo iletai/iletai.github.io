@@ -1,5 +1,9 @@
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import {
+    Mail as MailIcon,
+    X as XIcon
+} from "lucide-react";
 import Link from "next/link";
+import { SiGithub, SiLinkedin } from "react-icons/si";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
@@ -49,38 +53,38 @@ export default function Footer() {
                         <h3 className="text-lg font-semibold mb-4">Connect</h3>
                         <div className="flex space-x-4">
                             <a
-                                href="https://github.com"
+                                href="https://github.com/iletai"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="GitHub"
                             >
-                                <Github className="h-5 w-5" />
+                                <SiGithub className="h-5 w-5" />
                             </a>
                             <a
-                                href="https://linkedin.com"
+                                href="https://linkedin.com/in/iletai"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="LinkedIn"
                             >
-                                <Linkedin className="h-5 w-5" />
+                                <SiLinkedin className="h-5 w-5" />
                             </a>
                             <a
-                                href="https://twitter.com"
+                                href="https://x.com/tailqt"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-white transition-colors"
-                                aria-label="Twitter"
+                                aria-label="X (formerly Twitter)"
                             >
-                                <Twitter className="h-5 w-5" />
+                                <XIcon className="h-5 w-5" />
                             </a>
                             <a
-                                href="mailto:contact@example.com"
+                                href="mailto:iletai@hotmail.com"
                                 className="text-gray-400 hover:text-white transition-colors"
                                 aria-label="Email"
                             >
-                                <Mail className="h-5 w-5" />
+                                <MailIcon className="h-5 w-5" />
                             </a>
                         </div>
                     </div>

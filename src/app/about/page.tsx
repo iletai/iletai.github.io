@@ -1,3 +1,5 @@
+'use client';
+
 import AnimatedCard from "@/components/motion/AnimatedCard";
 import FadeInSection from "@/components/motion/FadeInSection";
 import PageTransition from "@/components/motion/PageTransition";
@@ -6,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import MagicBackground from "@/components/ui/magic-background";
 import { AnimatedGradientText, TextAnimate, TypingAnimation } from "@/components/ui/text-animate";
+import { motion } from "framer-motion";
 import {
     ArrowRight,
     Award,
@@ -15,15 +18,8 @@ import {
     Sparkles,
     Workflow
 } from "lucide-react";
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-    title: "About | Le Quang Trong Tai",
-    description:
-        "Discover the journey, philosophy, and core values in digital product development of Le Quang Trong Tai."
-};
 
 const stats = [
     {
@@ -45,6 +41,11 @@ const stats = [
         label: "App Store Rating",
         value: "4.8★",
         description: "Average rating for published iOS applications"
+    },
+    {
+        label: "AAA Game Development",
+        value: "Asphalt 8",
+        description: "Contributed to AAA racing game with millions of downloads at Gameloft"
     }
 ] as const;
 
@@ -113,7 +114,7 @@ const toolbelt = [
     },
     {
         title: "Backend & Cloud",
-        items: ["Node.js", "NestJS", "FastAPI", "PostgreSQL", "PlanetScale", "AWS", "Azure"]
+        items: ["Node.js", "NestJS", "FastAPI", "NoSQL", "PostgreSQL", "PlanetScale", "AWS", "Azure"]
     },
     {
         title: "Dev Experience",
@@ -125,7 +126,7 @@ const toolbelt = [
     },
     {
         title: "Game & Graphics",
-        items: ["C++", "Game Engine", "Core Graphics", "Metal", "Performance Optimization", "Cross-platform"]
+        items: ["C++", "C#", "Game Engine", "Core Graphics", "Metal", "Performance Optimization", "Cross-platform"]
     }
 ] as const;
 
@@ -139,59 +140,134 @@ export default function AboutPage() {
                     <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:gap-16 sm:px-6 md:gap-20 lg:px-8">
                         <section className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-16">
                             <FadeInSection>
-                                <div>
-                                    <AnimatedGradientText className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 sm:text-sm">
-                                        About
-                                    </AnimatedGradientText>
-                                    <h1 className="mt-4 text-3xl font-bold text-gray-900 dark:text-white sm:mt-6 sm:text-4xl md:text-5xl lg:text-6xl">
+                                <div className="max-w-full overflow-hidden">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                                    >
+                                        <AnimatedGradientText className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 sm:text-sm">
+                                            About
+                                        </AnimatedGradientText>
+                                    </motion.div>
+                                    <motion.h1
+                                        className="mt-4 text-3xl font-bold text-gray-900 dark:text-white sm:mt-6 sm:text-4xl md:text-5xl lg:text-6xl"
+                                        initial={{ opacity: 0, y: 50 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                    >
                                         <TextAnimate animationType="word" animation="slideUp">
                                             Crafting sophisticated and sustainable digital experiences
                                         </TextAnimate>
-                                    </h1>
-                                    <TypingAnimation
-                                        className="mt-4 text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:mt-6 sm:text-lg sm:leading-relaxed"
-                                        duration={55}
-                                        startDelay={600}
+                                    </motion.h1>
+                                    <motion.div
+                                        className="mt-4 sm:mt-6 w-full overflow-hidden"
+                                        initial={{ opacity: 0, y: 40 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.8, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
                                     >
-                                        I&apos;m Le Quang Trong Tai – a versatile engineer with experience ranging from mobile native (iOS/Swift) to modern web platforms. From game development with C++ to healthcare apps with SwiftUI, I&apos;m passionate about creating digital products that positively impact users&apos; lives.
-                                    </TypingAnimation>
-                                    <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
-                                        <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 transition-all duration-200">
-                                            <Link href="/projects">
-                                                Explore Projects
-                                                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-                                            </Link>
-                                        </Button>
-                                        <Button asChild variant="outline" size="lg" className="transition-all duration-200">
-                                            <Link href="/contact">
-                                                Get In Touch
-                                            </Link>
-                                        </Button>
-                                    </div>
+                                        <TypingAnimation
+                                            className="text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg sm:leading-relaxed break-words hyphens-auto max-w-full pr-4"
+                                            duration={55}
+                                            startDelay={1000}
+                                        >
+                                            I&apos;m Le Quang Trong Tai – a versatile engineer with experience ranging from mobile native (iOS/Swift) to modern web platforms. From game development with C++ to healthcare apps with SwiftUI,
+                                            I&apos;m passionate about creating digital products that positively impact users&apos; lives.
+                                        </TypingAnimation>
+                                    </motion.div>
+                                    <motion.div
+                                        className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4"
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.6, delay: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                                    >
+                                        <motion.div
+                                            whileHover={{ scale: 1.05, y: -2 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                        >
+                                            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                                <Link href="/projects">
+                                                    Explore Projects
+                                                    <motion.div
+                                                        animate={{ x: [0, 3, 0] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                                    >
+                                                        <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                                                    </motion.div>
+                                                </Link>
+                                            </Button>
+                                        </motion.div>
+                                        <motion.div
+                                            whileHover={{ scale: 1.05, y: -2 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                        >
+                                            <Button asChild variant="outline" size="lg" className="transition-all duration-200 shadow-md hover:shadow-lg">
+                                                <Link href="/contact">
+                                                    Get In Touch
+                                                </Link>
+                                            </Button>
+                                        </motion.div>
+                                    </motion.div>
                                 </div>
                             </FadeInSection>
 
                             <FadeInSection delay={0.2}>
-                                <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-white/40 bg-white/70 p-1 shadow-xl backdrop-blur transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] dark:border-white/10 dark:bg-slate-900/80 sm:max-w-md lg:max-w-sm">
-                                    <div className="relative h-80 w-full overflow-hidden rounded-[1.35rem] sm:h-96">
+                                <motion.div
+                                    className="relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-white/40 bg-white/70 p-1 shadow-xl backdrop-blur dark:border-white/10 dark:bg-slate-900/80 sm:max-w-md lg:max-w-sm"
+                                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
+                                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        y: -5,
+                                        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                                        transition: { duration: 0.3, ease: "easeOut" }
+                                    }}
+                                >
+                                    <motion.div
+                                        className="relative h-80 w-full overflow-hidden rounded-[1.35rem] sm:h-96"
+                                        whileHover={{ scale: 1.05 }}
+                                        transition={{ duration: 0.4, ease: "easeOut" }}
+                                    >
                                         <Image
                                             src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=800&h=1000&fit=crop&crop=entropy"
                                             alt="Creative workspace with natural lighting"
                                             fill
-                                            className="object-cover transition-transform duration-500 hover:scale-110"
+                                            className="object-cover transition-transform duration-500"
                                             priority
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                                    </div>
-                                    <div className="mt-4 space-y-3 px-4 pb-5 sm:px-5 sm:pb-6">
-                                        <p className="text-sm font-semibold text-blue-600 transition-colors dark:text-blue-300 sm:text-base">
+                                        <motion.div
+                                            className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
+                                            initial={{ opacity: 0.5 }}
+                                            whileHover={{ opacity: 0.3 }}
+                                            transition={{ duration: 0.3 }}
+                                        />
+                                    </motion.div>
+                                    <motion.div
+                                        className="mt-4 space-y-3 px-4 pb-5 sm:px-5 sm:pb-6"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.6, delay: 1, ease: [0.4, 0, 0.2, 1] }}
+                                    >
+                                        <motion.p
+                                            className="text-sm font-semibold text-blue-600 transition-colors dark:text-blue-300 sm:text-base"
+                                            whileHover={{ scale: 1.02, x: 3 }}
+                                            transition={{ type: "spring", stiffness: 300 }}
+                                        >
                                             iOS Developer / Fullstack Engineer
-                                        </p>
-                                        <p className="text-sm leading-relaxed text-gray-600 transition-colors dark:text-gray-300 sm:text-base sm:leading-relaxed">
+                                        </motion.p>
+                                        <motion.p
+                                            className="text-sm leading-relaxed text-gray-600 transition-colors dark:text-gray-300 sm:text-base sm:leading-relaxed"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.6, delay: 1.2 }}
+                                        >
                                             Specializing in mobile native, web platforms, and game development with focus on UX and performance.
-                                        </p>
-                                    </div>
-                                </div>
+                                        </motion.p>
+                                    </motion.div>
+                                </motion.div>
                             </FadeInSection>
                         </section>
 
@@ -212,21 +288,69 @@ export default function AboutPage() {
                                 </div>
                                 <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
                                     {stats.map((stat, index) => (
-                                        <AnimatedCard key={stat.label} index={index} className="h-full transition-all duration-300 hover:scale-[1.02]">
-                                            <CardHeader className="pb-2 sm:pb-3">
-                                                <CardTitle className="text-3xl font-bold text-blue-600 dark:text-blue-400 sm:text-4xl">
-                                                    {stat.value}
-                                                </CardTitle>
-                                                <CardDescription className="text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
-                                                    {stat.label}
-                                                </CardDescription>
-                                            </CardHeader>
-                                            <CardContent className="pt-0">
-                                                <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-300 sm:text-sm">
-                                                    {stat.description}
-                                                </p>
-                                            </CardContent>
-                                        </AnimatedCard>
+                                        <motion.div
+                                            key={stat.label}
+                                            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            transition={{
+                                                duration: 0.6,
+                                                delay: index * 0.15,
+                                                ease: [0.4, 0, 0.2, 1],
+                                                type: "spring",
+                                                stiffness: 200
+                                            }}
+                                            whileHover={{
+                                                scale: 1.05,
+                                                y: -8,
+                                                rotateY: 5,
+                                                transition: { duration: 0.2, ease: "easeOut" }
+                                            }}
+                                            whileTap={{ scale: 0.98 }}
+                                        >
+                                            <AnimatedCard key={stat.label} index={index} className="h-full transition-all duration-300 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-white/20 dark:border-white/10 shadow-xl">
+                                                <CardHeader className="pb-2 sm:pb-3">
+                                                    <motion.div
+                                                        initial={{ scale: 0 }}
+                                                        animate={{ scale: 1 }}
+                                                        transition={{
+                                                            duration: 0.5,
+                                                            delay: index * 0.15 + 0.3,
+                                                            type: "spring",
+                                                            stiffness: 300
+                                                        }}
+                                                    >
+                                                        <CardTitle className="text-3xl font-bold text-blue-600 dark:text-blue-400 sm:text-4xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                                            {stat.value}
+                                                        </CardTitle>
+                                                    </motion.div>
+                                                    <motion.div
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        transition={{
+                                                            duration: 0.4,
+                                                            delay: index * 0.15 + 0.5
+                                                        }}
+                                                    >
+                                                        <CardDescription className="text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
+                                                            {stat.label}
+                                                        </CardDescription>
+                                                    </motion.div>
+                                                </CardHeader>
+                                                <CardContent className="pt-0">
+                                                    <motion.p
+                                                        className="text-xs leading-relaxed text-gray-600 dark:text-gray-300 sm:text-sm"
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        transition={{
+                                                            duration: 0.4,
+                                                            delay: index * 0.15 + 0.7
+                                                        }}
+                                                    >
+                                                        {stat.description}
+                                                    </motion.p>
+                                                </CardContent>
+                                            </AnimatedCard>
+                                        </motion.div>
                                     ))}
                                 </div>
                             </FadeInSection>
