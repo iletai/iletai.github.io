@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Briefcase, Download, Home, Mail, Menu, Shield, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const dockItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -18,23 +18,14 @@ const dockItems = [
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isClient, setIsClient] = useState(false);
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const pathname = usePathname();
 
     // Show back button when not on home page
     const showBackButton = pathname !== '/';
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    if (!isClient) {
-        return null;
-    }
-
     return (
-        <>
+        <div suppressHydrationWarning>
             <style jsx>{`
                 .macos-dock {
                     position: fixed;
@@ -490,6 +481,6 @@ export default function Header() {
                     )}
                 </AnimatePresence>
             </div>
-        </>
+        </div>
     );
 }

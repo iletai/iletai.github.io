@@ -44,16 +44,18 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="vi" className={inter.variable} suppressHydrationWarning>
-            <body className="font-inter antialiased bg-background text-foreground" suppressHydrationWarning={true}>
+            <body className="font-inter antialiased bg-background text-foreground" suppressHydrationWarning>
                 <ThemeProvider>
                     <HydrationFix />
-                    <Header />
-                    <PageTransition>
-                        <main className="min-h-screen">
-                            {children}
-                        </main>
-                    </PageTransition>
-                    <Footer />
+                    <div suppressHydrationWarning>
+                        <Header />
+                        <PageTransition>
+                            <main className="min-h-screen">
+                                {children}
+                            </main>
+                        </PageTransition>
+                        <Footer />
+                    </div>
                 </ThemeProvider>
             </body>
         </html>

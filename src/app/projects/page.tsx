@@ -23,7 +23,7 @@ async function getProjectsData(): Promise<Project[]> {
     try {
         const response = await projectsService.getProjects();
         // Map API Project to local Project interface, ensuring required fields
-        const apiProjects = response.data.data || [];
+        const apiProjects = response.data.projects || [];
         return apiProjects.map(project => ({
             id: project.id,
             title: project.title,

@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { contactService } from '@/lib/api';
 import { ContactForm } from '@/lib/types';
 import { AlertCircle, CheckCircle, Loader2, Send } from 'lucide-react';
-import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
+import { useCallback, useReducer, useRef, useState } from 'react';
 
 // =====================================
 // Types & Interfaces
@@ -209,17 +209,18 @@ export default function ContactFormComponent({
     // =====================================
     // Memoized Values
     // =====================================
-    const isFormValid = useMemo(() => {
-        return Object.keys(validateForm(formState.data)).length === 0;
-    }, [formState.data]);
+    // Note: These values are prepared for future features
+    // const isFormValid = useMemo(() => {
+    //     return Object.keys(validateForm(formState.data)).length === 0;
+    // }, [formState.data]);
 
-    const characterCount = useMemo(() => {
-        return formState.data.message.length;
-    }, [formState.data.message]);
+    // const characterCount = useMemo(() => {
+    //     return formState.data.message.length;
+    // }, [formState.data.message]);
 
-    const isFormDirty = useMemo(() => {
-        return JSON.stringify(formState.data) !== JSON.stringify(INITIAL_FORM_DATA);
-    }, [formState.data]);
+    // const isFormDirty = useMemo(() => {
+    //     return JSON.stringify(formState.data) !== JSON.stringify(INITIAL_FORM_DATA);
+    // }, [formState.data]);
 
     // =====================================
     // Event Handlers

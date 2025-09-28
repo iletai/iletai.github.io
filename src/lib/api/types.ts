@@ -113,8 +113,9 @@ export interface Project {
 
 export interface ProjectsResponse {
     data: {
-        data: Project[];
-        total: number;
+        projects: Project[];
+        totalCount: number;
+        hasMore: boolean;
         page: number;
         limit: number;
     };

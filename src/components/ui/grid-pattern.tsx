@@ -9,7 +9,6 @@ interface GridPatternProps {
     x?: number;
     y?: number;
     strokeDasharray?: string;
-    numSquares?: number;
     className?: string;
     maxOpacity?: number;
     squares?: Array<[x: number, y: number]>;
@@ -21,7 +20,7 @@ export default function GridPattern({
     x = -1,
     y = -1,
     strokeDasharray = "0",
-    numSquares = 50,
+
     className,
     maxOpacity = 0.5,
     squares = [],
