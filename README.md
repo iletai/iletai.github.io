@@ -80,17 +80,21 @@ src/
    ```
 
 3. **Configure environment variables**
+
    ```bash
    cp .env.example .env.local
    ```
 
    Update the variables in `.env.local`:
+
    ```env
-   NEXT_PUBLIC_API_URL=https://your-worker.your-domain.workers.dev
+   API_BASE_URL=https://api.iletai.qzz.io
+   NEXT_PUBLIC_API_BASE_URL=https://your-api-domain.com/api
    NEXT_PUBLIC_SITE_URL=https://your-domain.com
    ```
 
 4. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -101,21 +105,25 @@ src/
 
 ### API Integration
 
-The website is configured to work with Cloudflare Workers backend. Update the API URLs in:
+The website is integrated with a comprehensive backend API. Configuration:
 
-- `src/lib/api/client.ts` - API client configuration
-- Environment variables for production deployment
+- **Environment**: Set `API_BASE_URL` (server-only) or `NEXT_PUBLIC_API_BASE_URL` (client-accessible) in `.env.local`
+- **Documentation**: See [API_INTEGRATION.md](./API_INTEGRATION.md) for the complete guide
+- **Default**: Falls back to `https://api.iletai.qzz.io` when no environment variables are provided
 
 ### Content Management
 
 #### Static Data
-Current implementation uses static data for demonstration. Replace with API calls:
+
+Some sections still ship with placeholder content for quick previews. Replace with API calls as needed:
 
 - `src/app/page.tsx` - Homepage featured content
 - `src/app/projects/page.tsx` - Projects data
-- `src/app/blog/page.tsx` - Blog posts data
+
+The blog listing (`src/app/blog/page.tsx`) and detail pages (`src/app/blog/[slug]/page.tsx`) now load published posts directly from the live API, including accessible error states and server-side validation of the response structure.
 
 #### Dynamic Content
+
 The API client is ready for dynamic content integration:
 
 ```typescript
@@ -144,11 +152,13 @@ export const metadata: Metadata = {
 ## 🎨 Customization
 
 ### Styling
+
 - **Colors**: Update Tailwind config for brand colors
 - **Typography**: Modify font settings in `layout.tsx`
 - **Components**: Customize component styles in respective files
 
 ### Content
+
 - **Personal Info**: Update contact information in contact page
 - **Social Links**: Modify social media links in footer
 - **Projects**: Add your projects in projects page
@@ -170,6 +180,7 @@ npm run type-check   # Run TypeScript check
 ### Vercel (Recommended)
 
 1. **Connect to Vercel**
+
    ```bash
    npx vercel
    ```
@@ -179,6 +190,7 @@ npm run type-check   # Run TypeScript check
    - Update API URLs for production
 
 3. **Deploy**
+
    ```bash
    npx vercel --prod
    ```
@@ -186,6 +198,7 @@ npm run type-check   # Run TypeScript check
 ### Other Platforms
 
 The application can be deployed to any platform supporting Next.js:
+
 - Netlify
 - AWS Amplify
 - Railway
@@ -196,6 +209,7 @@ The application can be deployed to any platform supporting Next.js:
 The portfolio is designed to work with your existing Cloudflare Workers backend:
 
 ### API Endpoints Expected
+
 - `GET /api/posts` - Blog posts list
 - `GET /api/posts/:slug` - Individual blog post
 - `GET /api/projects` - Projects list
@@ -203,6 +217,7 @@ The portfolio is designed to work with your existing Cloudflare Workers backend:
 - `POST /api/analytics/pageview` - Page view tracking
 
 ### CORS Configuration
+
 Ensure your Cloudflare Workers allow requests from your domain:
 
 ```javascript

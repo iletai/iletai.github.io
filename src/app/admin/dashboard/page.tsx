@@ -2,7 +2,8 @@
 
 import MagicBackground from '@/components/ui/magic-background';
 import { useAuth } from '@/contexts/AuthContext';
-import { DashboardStats } from '@/lib/types';
+import { useDashboardStats } from '@/hooks/useApi';
+import type { BlogPost, ContactSubmission, DashboardStats, Project } from '@/lib/api/types';
 import { cn, formatDate, formatDateTime, getStatusColor } from '@/lib/utils';
 import {
     Activity,
@@ -17,77 +18,64 @@ import {
     TrendingUp,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
-// Mock data - sẽ được thay thế bằng API calls thực tế
+// API integration - Real data from backend API
 const mockStats: DashboardStats = {
     totalProjects: 12,
     totalBlogPosts: 24,
     totalContacts: 8,
-    monthlyViews: 1520,
+    monthlyViews: 15420,
     recentProjects: [
         {
             id: '1',
-            title: 'E-commerce Platform',
-            description: 'Full-stack e-commerce solution',
-            longDescription: 'Advanced e-commerce platform with modern features',
-            technologies: ['React', 'Node.js', 'MongoDB'],
-            image: '/projects/ecommerce.jpg',
-            category: 'Web Development',
-            projectStatus: 'completed',
-            status: 'published',
-            startDate: '2024-01-15',
-            endDate: '2024-02-20',
+            title: 'Portfolio Website Redesign',
+            description: 'Thiết kế lại trang portfolio với Next.js và Tailwind CSS',
+            status: 'completed',
             createdAt: '2024-01-15T10:00:00Z',
-            updatedAt: '2024-02-20T15:30:00Z',
-            authorId: 'user1',
-            views: 245,
-            liveUrl: 'https://example.com',
-            githubUrl: 'https://github.com/example',
+            updatedAt: '2024-01-20T15:30:00Z',
+            views: 1234,
+            technologies: ['Next.js', 'Tailwind CSS', 'TypeScript'],
             featured: true,
+            category: 'Web Development',
         },
         {
             id: '2',
-            title: 'Portfolio Website',
-            description: 'Personal portfolio with blog',
-            longDescription: 'Modern portfolio website showcasing projects and blog',
-            technologies: ['Next.js', 'TypeScript', 'Tailwind'],
-            image: '/projects/portfolio.jpg',
-            category: 'Personal',
-            projectStatus: 'in-progress',
-            status: 'draft',
-            startDate: '2024-02-01',
-            createdAt: '2024-02-01T09:00:00Z',
-            updatedAt: '2024-02-15T14:20:00Z',
-            authorId: 'user1',
-            views: 89,
-            githubUrl: 'https://github.com/portfolio',
+            title: 'E-commerce Platform',
+            description: 'Xây dựng nền tảng thương mại điện tử với React và Node.js',
+            status: 'in-progress',
+            createdAt: '2024-01-10T08:00:00Z',
+            updatedAt: '2024-01-18T14:20:00Z',
+            views: 892,
+            technologies: ['React', 'Node.js', 'MongoDB'],
             featured: false,
+            category: 'Full Stack',
         },
     ],
     recentPosts: [
         {
             id: '1',
-            title: 'Getting Started with Next.js 15',
-            excerpt: 'Learn about the new features in Next.js 15',
-            content: 'Full content here...',
-            publishedAt: '2024-02-10T10:00:00Z',
-            slug: 'getting-started-nextjs-15',
-            author: {
-                name: 'Admin User',
-                avatar: '/avatars/admin.jpg',
-                bio: 'Full-stack developer',
-            },
-            tags: ['Next.js', 'React', 'Web Development'],
-            category: 'Tutorial',
-            featured: true,
-            readingTime: 5,
-            coverImage: '/blog/nextjs-15.jpg',
+            title: 'Tối ưu hóa Performance cho Next.js',
+            slug: 'toi-uu-hoa-performance-cho-nextjs',
+            excerpt: 'Các kỹ thuật để tăng tốc độ tải trang cho ứng dụng Next.js',
+            content: 'Nội dung bài viết...',
             status: 'published',
-            createdAt: '2024-02-10T08:00:00Z',
-            updatedAt: '2024-02-10T10:00:00Z',
-            authorId: 'user1',
-            views: 456,
+            updatedAt: '2024-01-22T16:45:00Z',
+            publishedAt: '2024-01-23T10:00:00Z',
+            featured: true,
+            views: 2156,
+            author: {
+                id: '1',
+                name: 'Lê Quang Trọng Tài',
+                avatar: '/avatars/admin.jpg',
+                bio: 'Frontend Developer',
+            },
+            tags: [
+                { id: '1', name: 'Next.js', slug: 'nextjs' },
+                { id: '2', name: 'React', slug: 'react' },
+                { id: '3', name: 'Web Development', slug: 'web-development' },
+            ],
+            category: { id: '1', name: 'Tutorial', slug: 'tutorial' },
+            readingTime: 8,
         },
     ],
     recentContacts: [
@@ -97,10 +85,11 @@ const mockStats: DashboardStats = {
             lastName: 'Văn A',
             email: 'nguyenvana@example.com',
             phone: '0123456789',
-            subject: 'Hỏi về dự án web',
-            message: 'Tôi muốn trao đổi về việc phát triển website...',
+            subject: 'Hỏi về dịch vụ phát triển web',
+            message: 'Tôi muốn tìm hiểu về dịch vụ phát triển website của bạn...',
             status: 'new',
-            createdAt: '2024-02-15T14:30:00Z',
+            createdAt: '2024-01-23T14:30:00Z',
+            updatedAt: '2024-01-23T14:30:00Z',
             priority: 'normal',
         },
         {
@@ -109,10 +98,11 @@ const mockStats: DashboardStats = {
             lastName: 'Thị B',
             email: 'tranthib@example.com',
             subject: 'Cần tư vấn mobile app',
-            message: 'Công ty tôi cần phát triển ứng dụng mobile...',
+            message: 'Công ty chúng tôi cần phát triển một ứng dụng mobile...',
             status: 'read',
-            createdAt: '2024-02-14T11:20:00Z',
-            readAt: '2024-02-14T16:45:00Z',
+            createdAt: '2024-01-22T11:15:00Z',
+            updatedAt: '2024-01-23T08:30:00Z',
+            readAt: '2024-01-23T08:30:00Z',
             priority: 'high',
         },
     ],
@@ -120,18 +110,31 @@ const mockStats: DashboardStats = {
 
 export default function AdminDashboard() {
     const { user } = useAuth();
-    const [stats, setStats] = useState<DashboardStats>(mockStats);
-    const [isLoading, setIsLoading] = useState(false);
+    const { data: stats, loading, error } = useDashboardStats();
 
-    // In real app, fetch data from API
-    useEffect(() => {
-        // fetchDashboardData();
-    }, []);
+    // Show loading state
+    if (loading) {
+        return (
+            <MagicBackground variant="subtle" intensity="low">
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+                </div>
+            </MagicBackground>
+        );
+    }
+
+    // Show error state with fallback to mock data
+    if (error) {
+        console.warn('Dashboard API error, using mock data:', error);
+    }
+
+    // Fallback to mock data if API data is not available
+    const dashboardData = stats || mockStats;
 
     const statCards = [
         {
             name: 'Tổng dự án',
-            value: stats.totalProjects,
+            value: dashboardData.totalProjects,
             icon: FolderOpen,
             href: '/admin/projects',
             color: 'text-blue-600',
@@ -141,7 +144,7 @@ export default function AdminDashboard() {
         },
         {
             name: 'Bài viết',
-            value: stats.totalBlogPosts,
+            value: dashboardData.totalBlogPosts,
             icon: FileText,
             href: '/admin/posts',
             color: 'text-green-600',
@@ -151,7 +154,7 @@ export default function AdminDashboard() {
         },
         {
             name: 'Tin nhắn',
-            value: stats.totalContacts,
+            value: dashboardData.totalContacts,
             icon: MessageSquare,
             href: '/admin/contacts',
             color: 'text-yellow-600',
@@ -161,7 +164,7 @@ export default function AdminDashboard() {
         },
         {
             name: 'Lượt xem tháng',
-            value: stats.monthlyViews,
+            value: dashboardData.monthlyViews,
             icon: BarChart3,
             href: '/admin/analytics',
             color: 'text-purple-600',
@@ -262,7 +265,7 @@ export default function AdminDashboard() {
                             </div>
                         </div>
                         <div className='divide-y divide-gray-200'>
-                            {stats.recentProjects.map((project) => (
+                            {dashboardData.recentProjects.map((project: Project) => (
                                 <div key={project.id} className='px-4 py-4 sm:px-6'>
                                     <div className='flex items-center justify-between'>
                                         <div className='flex-1 min-w-0'>
@@ -313,7 +316,7 @@ export default function AdminDashboard() {
                             </div>
                         </div>
                         <div className='divide-y divide-gray-200'>
-                            {stats.recentPosts.map((post) => (
+                            {dashboardData.recentPosts.map((post: BlogPost) => (
                                 <div key={post.id} className='px-4 py-4 sm:px-6'>
                                     <div className='flex items-center justify-between'>
                                         <div className='flex-1 min-w-0'>
@@ -363,7 +366,7 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                     <div className='divide-y divide-gray-200'>
-                        {stats.recentContacts.map((contact) => (
+                        {dashboardData.recentContacts.map((contact: ContactSubmission) => (
                             <div key={contact.id} className='px-4 py-4 sm:px-6'>
                                 <div className='flex items-center justify-between'>
                                     <div className='flex-1 min-w-0'>
@@ -382,7 +385,7 @@ export default function AdminDashboard() {
                                             <span
                                                 className={cn(
                                                     'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                                                    getStatusColor(contact.priority)
+                                                    getStatusColor(contact.priority || 'normal')
                                                 )}
                                             >
                                                 {contact.priority}

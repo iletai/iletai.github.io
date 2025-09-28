@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { apiClient } from '@/lib/api/client';
+import { contactService } from '@/lib/api';
 import { ContactForm } from '@/lib/types';
 import { AlertCircle, CheckCircle, Loader2, Send } from 'lucide-react';
 import { useCallback, useMemo, useReducer, useRef, useState } from 'react';
@@ -277,7 +277,7 @@ export default function ContactFormComponent({
         setStatus({ type: 'loading' });
 
         try {
-            await apiClient.sendContactForm(formState.data);
+            await contactService.submitContactForm(formState.data);
 
             setStatus({
                 type: 'success',

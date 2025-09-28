@@ -15,6 +15,7 @@ const navigation = [
     { name: 'Dự án', href: '/projects' },
     { name: 'Giới thiệu', href: '/about' },
     { name: 'Liên hệ', href: '/contact' },
+    { name: 'API Status', href: '/api-status' },
     { name: 'Admin', href: '/admin/login' },
 ];
 
