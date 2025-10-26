@@ -1,4 +1,5 @@
 # Technology Stack Blueprint: Professional Portfolio Website with Blog
+
 ## 🔄 Updated for Existing Cloudflare Workers Backend
 
 ## Table of Contents
@@ -275,11 +276,13 @@ This blueprint outlines a professional portfolio website with blog functionality
 ### Phase 4: CI/CD Pipeline (Day 10)
 
 #### Step 4.1: GitHub Actions Setup
+
 - Lint and test workflow
 - Build and deployment automation
 - Environment variable management
 
 #### Step 4.2: Deployment Configuration
+
 - Vercel project setup
 - Cloudflare Worker deployment
 - Domain integration testing
@@ -287,11 +290,13 @@ This blueprint outlines a professional portfolio website with blog functionality
 ### Phase 5: Testing & Optimization (Days 11-12)
 
 #### Step 5.1: Testing Implementation
+
 - Unit tests for components
 - Integration tests for API endpoints
 - E2E tests for critical user flows
 
 #### Step 5.2: Performance Optimization
+
 - Image optimization
 - Bundle size analysis
 - Core Web Vitals optimization
@@ -1262,6 +1267,7 @@ command = "npm run build"
 ### 1. SEO-Related Risks
 
 **Risk**: Poor search engine indexing due to client-side rendering
+
 - **Mitigation**:
   - Use Next.js App Router with Server Components
   - Implement proper meta tags and Open Graph data
@@ -1270,6 +1276,7 @@ command = "npm run build"
   - Ensure proper canonical URLs
 
 **Risk**: Slow loading affecting SEO rankings
+
 - **Mitigation**:
   - Optimize images with Next.js Image component
   - Implement proper caching strategies
@@ -1279,6 +1286,7 @@ command = "npm run build"
 ### 2. API Gateway Risks
 
 **Risk**: API latency affecting user experience
+
 - **Mitigation**:
   - Use Cloudflare Workers for edge computing (low latency)
   - Implement request/response caching
@@ -1286,6 +1294,7 @@ command = "npm run build"
   - Add retry logic with exponential backoff
 
 **Risk**: CORS errors preventing API access
+
 - **Mitigation**:
   - Configure proper CORS headers in Worker
   - Test CORS configuration thoroughly
@@ -1293,6 +1302,7 @@ command = "npm run build"
   - Use specific origins instead of wildcards
 
 **Risk**: API abuse and DDoS attacks
+
 - **Mitigation**:
   - Implement rate limiting per IP address
   - Use Cloudflare's DDoS protection
@@ -1302,6 +1312,7 @@ command = "npm run build"
 ### 3. Performance Risks
 
 **Risk**: Large bundle sizes affecting load times
+
 - **Mitigation**:
   - Use dynamic imports for code splitting
   - Implement tree shaking for unused code
@@ -1309,6 +1320,7 @@ command = "npm run build"
   - Optimize dependencies and remove unused packages
 
 **Risk**: Memory leaks in React components
+
 - **Mitigation**:
   - Properly clean up event listeners and timers
   - Use useEffect cleanup functions
@@ -1318,6 +1330,7 @@ command = "npm run build"
 ### 4. Security Risks
 
 **Risk**: XSS attacks through blog content
+
 - **Mitigation**:
   - Sanitize all user-generated content
   - Use proper HTML escaping in templates
@@ -1325,6 +1338,7 @@ command = "npm run build"
   - Validate and sanitize markdown input
 
 **Risk**: Data exposure through API endpoints
+
 - **Mitigation**:
   - Implement proper authentication and authorization
   - Use HTTPS everywhere
@@ -1334,6 +1348,7 @@ command = "npm run build"
 ### 5. Deployment Risks
 
 **Risk**: Build failures causing deployment issues
+
 - **Mitigation**:
   - Comprehensive CI/CD pipeline with multiple checks
   - Automated testing before deployment
@@ -1341,6 +1356,7 @@ command = "npm run build"
   - Monitoring and alerting for build status
 
 **Risk**: DNS and domain configuration issues
+
 - **Mitigation**:
   - Test DNS propagation thoroughly
   - Use monitoring tools for domain health
@@ -1354,6 +1370,7 @@ command = "npm run build"
 ### Step 1: Domain Setup
 
 1. **Add domain to Cloudflare**
+
    ```bash
    # Login to Cloudflare dashboard
    # Add your domain
@@ -1361,6 +1378,7 @@ command = "npm run build"
    ```
 
 2. **Configure SSL/TLS**
+
    ```bash
    # In Cloudflare dashboard:
    # SSL/TLS → Overview → Full (strict)
@@ -1371,6 +1389,7 @@ command = "npm run build"
 ### Step 2: Vercel Setup
 
 1. **Connect GitHub repository**
+
    ```bash
    # Install Vercel CLI
    npm i -g vercel
@@ -1381,6 +1400,7 @@ command = "npm run build"
    ```
 
 2. **Configure custom domain**
+
    ```bash
    # In Vercel dashboard:
    # Project Settings → Domains
@@ -1391,12 +1411,14 @@ command = "npm run build"
 ### Step 3: Cloudflare Worker Deployment
 
 1. **Install Wrangler CLI**
+
    ```bash
    npm install -g @cloudflare/wrangler
    wrangler login
    ```
 
 2. **Deploy Worker**
+
    ```bash
    cd api-gateway
    wrangler deploy --env production
@@ -1405,6 +1427,7 @@ command = "npm run build"
 ### Step 4: Environment Variables
 
 **Vercel Environment Variables:**
+
 ```bash
 # In Vercel dashboard → Project Settings → Environment Variables
 NEXT_PUBLIC_API_URL=https://api.yourdomain.com
@@ -1412,6 +1435,7 @@ CONTACT_EMAIL=your-email@example.com
 ```
 
 **Cloudflare Worker Secrets:**
+
 ```bash
 # Set secrets using Wrangler CLI
 wrangler secret put BACKEND_API_KEY --env production
@@ -1421,6 +1445,7 @@ wrangler secret put BACKEND_URL --env production
 ### Step 5: GitHub Actions Setup
 
 **Required Secrets:**
+
 ```bash
 # In GitHub → Repository Settings → Secrets and Variables → Actions
 
@@ -1437,6 +1462,7 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
 ### Step 6: Testing and Validation
 
 1. **DNS Propagation Check**
+
    ```bash
    # Test DNS resolution
    nslookup yourdomain.com
@@ -1444,6 +1470,7 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
    ```
 
 2. **SSL Certificate Validation**
+
    ```bash
    # Check SSL certificate
    curl -I https://yourdomain.com
@@ -1451,6 +1478,7 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
    ```
 
 3. **API Gateway Testing**
+
    ```bash
    # Test health endpoint
    curl https://api.yourdomain.com/health
@@ -1462,6 +1490,7 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
    ```
 
 4. **Performance Testing**
+
    ```bash
    # Run Lighthouse audit
    npx lighthouse https://yourdomain.com --output=html --output-path=./lighthouse-report.html

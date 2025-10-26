@@ -50,7 +50,7 @@ export default function RootLayout({
                     <div suppressHydrationWarning>
                         <Header />
                         <PageTransition>
-                            <main className="min-h-screen">
+                            <main className="min-h-screen pb-28">
                                 {children}
                             </main>
                         </PageTransition>
