@@ -36,7 +36,7 @@ async function loadBlogPost(slug: string): Promise<{ post: BlogPost | null; erro
 async function loadRelatedPosts(slug: string): Promise<BlogPost[]> {
     try {
         const response = await blogService.getBlogPosts({ status: "published", limit: 4 });
-        const posts = response?.data?.posts ?? [];
+        const posts = response?.posts ?? [];
         return posts.filter(post => post.slug !== slug).slice(0, 2);
     } catch {
         return [];
