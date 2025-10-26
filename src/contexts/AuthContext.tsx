@@ -1,11 +1,25 @@
 'use client';
 
-import { AuthSession, LoginCredentials, User } from '@/lib/types';
+import { authService } from '@/lib/api/auth';
+import type { User as ApiUser } from '@/lib/api/types';
+import type { AuthSession, LoginCredentials } from '@/lib/types';
 import { getTokenFromStorage, isTokenExpired, removeTokenFromStorage, setTokenInStorage } from '@/lib/utils';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
+// Map API User to local User type with default values
+function mapApiUserToLocal(apiUser: ApiUser): AuthSession['user'] {
+    return {
+        id: apiUser.id,
+        email: apiUser.email,
+        name: apiUser.fullName || apiUser.email.split('@')[0], // Fallback to email username
+        role: 'admin', // Default role since backend doesn't provide it yet
+        createdAt: apiUser.createdAt,
+        lastLoginAt: new Date().toISOString(),
+    };
+}
+
 interface AuthContextType {
-    user: User | null;
+    user: AuthSession['user'] | null;
     session: AuthSession | null;
     isLoading: boolean;
     isAuthenticated: boolean;
@@ -17,7 +31,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<AuthSession['user'] | null>(null);
     const [session, setSession] = useState<AuthSession | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -46,22 +60,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const verifyAndSetSession = async (token: string) => {
         try {
-            const response = await fetch('/api/auth/verify', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            // Set token to API client
+            authService.setAuthToken(token);
 
-            if (!response.ok) {
-                throw new Error('Token verification failed');
-            }
+            // Get current user from backend
+            const response = await authService.getCurrentUser();
 
-            const { data } = await response.json();
-            setUser(data.user);
-            setSession(data.session);
+            // Map API user to local user type
+            const localUser = mapApiUserToLocal(response.data);
+
+            // Create session
+            const authSession: AuthSession = {
+                user: localUser,
+                token,
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
+            };
+
+            setUser(localUser);
+            setSession(authSession);
         } catch (error) {
             console.error('Token verification failed:', error);
             removeTokenFromStorage();
+            authService.logout();
             setUser(null);
             setSession(null);
             throw error;
@@ -71,33 +91,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const login = async (credentials: LoginCredentials) => {
         try {
             setIsLoading(true);
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(credentials),
+
+            // Call backend API through authService
+            const response = await authService.login({
+                email: credentials.email,
+                password: credentials.password,
             });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Login failed');
-            }
+            // Map API user to local user type
+            const localUser = mapApiUserToLocal(response.data.user);
 
-            const { data } = await response.json();
-            const { user, session } = data;
+            // Use accessToken or token from response
+            const token = response.data.accessToken || response.data.token;
 
-            setUser(user);
-            setSession(session);
-            setTokenInStorage(session.token);
+            // Create auth session
+            const authSession: AuthSession = {
+                user: localUser,
+                token,
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
+            };
+
+            setUser(localUser);
+            setSession(authSession);
+            setTokenInStorage(token);
+            authService.setAuthToken(token);
 
             // Set up token refresh if needed
             if (credentials.rememberMe) {
-                scheduleTokenRefresh(session.expiresAt);
+                scheduleTokenRefresh(authSession.expiresAt);
             }
         } catch (error) {
             console.error('Login failed:', error);
-            throw error;
+            throw error instanceof Error ? error : new Error('Login failed');
         } finally {
             setIsLoading(false);
         }
@@ -107,14 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setSession(null);
         removeTokenFromStorage();
-
-        // Optional: Call logout endpoint to invalidate token on server
-        fetch('/api/auth/logout', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${session?.token}`,
-            },
-        }).catch(console.error);
+        authService.logout();
     };
 
     const refreshSession = async () => {
@@ -124,22 +142,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 throw new Error('No token available');
             }
 
-            const response = await fetch('/api/auth/refresh', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${currentToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Token refresh failed');
-            }
-
-            const { data } = await response.json();
-            setSession(data.session);
-            setTokenInStorage(data.session.token);
-
-            scheduleTokenRefresh(data.session.expiresAt);
+            // Verify token is still valid
+            await verifyAndSetSession(currentToken);
         } catch (error) {
             console.error('Session refresh failed:', error);
             logout();
