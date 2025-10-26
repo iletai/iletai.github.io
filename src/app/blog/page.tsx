@@ -17,7 +17,7 @@ interface BlogPageData {
 async function fetchBlogPageData(): Promise<BlogPageData> {
     try {
         const response = await blogService.getBlogPosts({ status: "published", limit: 20 });
-        const postsData = response?.data?.posts;
+        const postsData = response?.posts;
 
         if (!Array.isArray(postsData)) {
             throw new Error("Invalid blog data returned from API.");
@@ -29,9 +29,9 @@ async function fetchBlogPageData(): Promise<BlogPageData> {
 
         return {
             posts,
-            totalCount: response?.data?.totalCount ?? posts.length,
-            limit: response?.data?.limit ?? 20,
-            page: response?.data?.page ?? 1,
+            totalCount: response?.totalCount ?? posts.length,
+            limit: response?.limit ?? 20,
+            page: response?.page ?? 1,
             error: null,
         };
     } catch (error) {

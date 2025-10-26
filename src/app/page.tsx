@@ -71,7 +71,7 @@ async function getRecentBlogPosts(): Promise<BlogPost[]> {
             status: "published",
             limit: 2
         });
-        return response.data?.posts || [];
+        return response.posts || [];
     } catch (error) {
         console.error('Failed to fetch recent blog posts:', error);
         // Fallback data for development

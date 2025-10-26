@@ -27,8 +27,8 @@ const navigation = [
         description: 'System overview',
     },
     {
-        name: 'Articles',
-        href: '/admin/posts',
+        name: 'Blog Posts',
+        href: '/admin/blog',
         icon: FileText,
         description: 'Manage blog posts',
     },

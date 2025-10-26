@@ -4,12 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function AdminPage() {
-	const router = useRouter();
+    const router = useRouter();
 
-	useEffect(() => {
-		// Redirect to dashboard
-		router.replace('/admin/dashboard');
-	}, [router]);
+    useEffect(() => {
+        router.replace('/admin/dashboard');
+    }, [router]);
 
-	return null;
+    return null;
 }
