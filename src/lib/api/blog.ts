@@ -12,11 +12,11 @@ import {
 export interface CreateBlogPostRequest {
     title: string;
     slug: string;
-    excerpt?: string;
+    excerpt: string; // REQUIRED by backend
     content: string;
     coverImage?: string;
     categoryId?: string;
-    tagIds?: string[];
+    tags?: string[]; // Backend expects 'tags', not 'tagIds'
     status: 'draft' | 'published' | 'archived';
     featured?: boolean;
     seoTitle?: string;

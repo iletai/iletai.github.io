@@ -30,6 +30,7 @@ export default function AdminBlogPage() {
         try {
             setLoading(true);
             const response = await blogService.getBlogPosts({});
+            console.log("🚀 ~ AdminBlogPage ~ response:", response)
             setPosts(response.posts || []);
             setTotalCount(response.totalCount || 0);
         } catch (error) {

@@ -36,18 +36,22 @@ export default function NewBlogPage() {
 
     const handleSave = async (data: BlogFormData) => {
         try {
-            // Create new blog post via API
-            const response = await blogService.createBlogPost({
+            // Sanitize data before sending to backend
+            // Convert empty strings to undefined to match backend optional field validation
+            const payload = {
                 title: data.title,
                 slug: data.slug,
                 excerpt: data.excerpt,
                 content: data.content,
-                coverImage: data.coverImage,
-                categoryId: data.categoryId,
-                tagIds: data.tagIds,
+                coverImage: data.coverImage?.trim() || undefined, // Empty string → undefined
+                categoryId: data.categoryId?.trim() || undefined, // Empty string → undefined
+                tags: data.tagIds, // Map tagIds to tags for backend
                 status: data.status,
                 featured: data.featured,
-            });
+            };
+
+            // Create new blog post via API
+            const response = await blogService.createBlogPost(payload);
 
             if (response.data) {
                 alert('Blog post created successfully!');

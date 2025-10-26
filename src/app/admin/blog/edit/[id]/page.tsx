@@ -60,18 +60,22 @@ export default function EditBlogPage() {
 
     const handleSave = async (data: BlogFormData) => {
         try {
-            // Update blog post via API
-            const response = await blogService.updateBlogPost(postId, {
+            // Sanitize data before sending to backend
+            // Convert empty strings to undefined to match backend optional field validation
+            const payload = {
                 title: data.title,
                 slug: data.slug,
                 excerpt: data.excerpt,
                 content: data.content,
-                coverImage: data.coverImage,
-                categoryId: data.categoryId,
-                tagIds: data.tagIds,
+                coverImage: data.coverImage?.trim() || undefined, // Empty string → undefined
+                categoryId: data.categoryId?.trim() || undefined, // Empty string → undefined
+                tags: data.tagIds, // Map tagIds to tags for backend
                 status: data.status,
                 featured: data.featured,
-            });
+            };
+
+            // Update blog post via API
+            const response = await blogService.updateBlogPost(postId, payload);
 
             if (response.data) {
                 alert('Blog post updated successfully!');
