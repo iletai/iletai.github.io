@@ -119,7 +119,7 @@ export default async function BlogPage() {
                                         </div>
                                         <div className="p-6">
                                             <div className="flex flex-wrap gap-2 mb-3">
-                                                {post.tags.slice(0, 2).map((tag) => (
+                                                {(post.tags ?? []).slice(0, 2).map((tag) => (
                                                     <span
                                                         key={tag.id}
                                                         className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium"
@@ -169,7 +169,7 @@ export default async function BlogPage() {
                                 >
                                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-3">
                                         <div className="flex flex-wrap gap-2 mb-2 md:mb-0">
-                                            {post.tags.map((tag) => (
+                                            {(post.tags ?? []).map((tag) => (
                                                 <span
                                                     key={tag.id}
                                                     className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"

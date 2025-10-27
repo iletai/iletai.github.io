@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 {/* Article Header */}
                 <header className="mb-8">
                     <div className="flex flex-wrap gap-2 mb-4">
-                        {post.tags.map((tag) => (
+                        {(post.tags ?? []).map((tag) => (
                             <span
                                 key={tag.id}
                                 className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
@@ -139,7 +139,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <div className="flex items-center justify-between">
                         <div className="flex flex-wrap gap-2">
                             <span className="text-sm text-gray-600">Tags:</span>
-                            {post.tags.map((tag) => (
+                            {(post.tags ?? []).map((tag) => (
                                 <Link
                                     key={tag.id}
                                     href={`/blog?tag=${tag.slug}`}
