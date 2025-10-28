@@ -19,6 +19,7 @@ export default function EditBlogPage() {
     const [tags, setTags] = useState<Tag[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         loadData();
@@ -28,51 +29,51 @@ export default function EditBlogPage() {
     const loadData = async () => {
         try {
             setLoading(true);
+            setError(null);
 
-            // Load post by ID - We need to implement this
-            // For now, try to find by slug or mock it
-            const [categoriesRes, tagsRes] = await Promise.all([
+            // Load categories, tags, and post in parallel
+            const [categoriesRes, tagsRes, postRes] = await Promise.all([
                 blogService.getBlogCategories(),
                 blogService.getBlogTags(),
+                blogService.getBlogPostById(postId), // Use direct API call
             ]);
 
             setCategories(categoriesRes.data || []);
             setTags(tagsRes.data || []);
 
-            // TODO: Implement getPostById API call
-            // For now, try to load all posts and find by ID
-            const postsRes = await blogService.getBlogPosts({});
-            const foundPost = postsRes.posts.find((p: BlogPost) => p.id === postId);
-
-            if (!foundPost) {
+            if (!postRes.data) {
                 setError('Blog post not found');
                 return;
             }
 
-            setPost(foundPost);
+            setPost(postRes.data);
         } catch (err) {
             console.error('Failed to load data:', err);
-            setError('Failed to load blog post');
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load blog post';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
     const handleSave = async (data: BlogFormData) => {
+        setSaving(true);
         try {
-            // Sanitize data before sending to backend
-            // Convert empty strings to undefined to match backend optional field validation
+            // Sanitize and validate data before sending to backend
             const payload = {
-                title: data.title,
-                slug: data.slug,
-                excerpt: data.excerpt,
+                title: data.title.trim(),
+                slug: data.slug.trim(),
+                // Excerpt is required by backend - provide meaningful default if empty
+                excerpt: data.excerpt.trim() || data.content.slice(0, 200).replace(/[#*`]/g, '').trim(),
                 content: data.content,
-                coverImage: data.coverImage?.trim() || undefined, // Empty string → undefined
-                categoryId: data.categoryId?.trim() || undefined, // Empty string → undefined
-                tags: data.tagIds, // Map tagIds to tags for backend
+                coverImage: data.coverImage?.trim() || undefined,
+                categoryId: data.categoryId?.trim() || undefined,
+                tags: data.tagIds.length > 0 ? data.tagIds : undefined, // Only send if tags selected
                 status: data.status,
                 featured: data.featured,
             };
+
+            console.log('Updating post with payload:', payload);
 
             // Update blog post via API
             const response = await blogService.updateBlogPost(postId, payload);
@@ -83,7 +84,10 @@ export default function EditBlogPage() {
             }
         } catch (err) {
             console.error('Failed to update post:', err);
-            alert('Failed to update blog post. Please try again.');
+            const errorMessage = err instanceof Error ? err.message : 'Failed to update blog post';
+            alert(`Error: ${errorMessage}`);
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -144,6 +148,11 @@ export default function EditBlogPage() {
 
                     {/* Editor */}
                     <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        {saving && (
+                            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                <p className="text-blue-800 text-sm font-medium">Saving changes...</p>
+                            </div>
+                        )}
                         <BlogEditor
                             initialData={post}
                             categories={categories}

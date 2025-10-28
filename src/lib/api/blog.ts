@@ -105,12 +105,9 @@ export class BlogService {
         return this.getBlogPosts({ ...params, status: 'published' });
     }
 
-    // Get blog post by ID (Note: Backend uses SLUG, not ID)
-    // TODO: Backend needs GET /v1/posts/{id} endpoint or migrate to use slug
+    // Get blog post by ID (uses UUID format)
     async getBlogPostById(id: string): Promise<ApiResponse<BlogPost>> {
-        // Temporary: Try to use as slug first
-        console.warn('[API] getBlogPostById: Backend uses slug, not id. Consider using getBlogPostBySlug instead.');
-        return this.getBlogPostBySlug(id); // Assume id is actually a slug
+        return apiClient.get<ApiResponse<BlogPost>>(API_ENDPOINTS.BLOG_POST_BY_ID(id));
     }
 
     // ✅ CRUD operations - Fully implemented in backend

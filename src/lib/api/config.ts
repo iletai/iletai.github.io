@@ -22,9 +22,10 @@ export const API_ENDPOINTS = {
     // Blog Posts
     BLOG_POSTS: '/v1/posts',
     BLOG_POSTS_FEATURED: '/v1/posts/featured',
+    BLOG_POST_BY_ID: (id: string) => `/v1/posts/${id}`,
     BLOG_POST_BY_SLUG: (slug: string) => `/v1/posts/${slug}`,
-    BLOG_CATEGORIES: '/v1/blog/categories',
-    BLOG_TAGS: '/v1/blog/tags',
+    BLOG_CATEGORIES: '/v1/categories',
+    BLOG_TAGS: '/v1/tags',
 
     // Projects
     PROJECTS: '/api/projects',

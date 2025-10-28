@@ -45,6 +45,7 @@ export default function BlogEditor({
     onSave,
     onCancel,
 }: BlogEditorProps) {
+    // Initialize form data with proper defaults
     const [formData, setFormData] = useState<BlogFormData>({
         title: initialData?.title || '',
         slug: initialData?.slug || '',
@@ -59,7 +60,18 @@ export default function BlogEditor({
 
     const [showPreview, setShowPreview] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [selectedTags, setSelectedTags] = useState<string[]>(formData.tagIds);
+    const [selectedTags, setSelectedTags] = useState<string[]>(
+        initialData?.tags?.map(t => t.id) || []
+    );
+
+    // Sync selectedTags with formData.tagIds on mount/update
+    React.useEffect(() => {
+        if (initialData?.tags) {
+            const tagIds = initialData.tags.map(t => t.id);
+            setSelectedTags(tagIds);
+            setFormData(prev => ({ ...prev, tagIds }));
+        }
+    }, [initialData?.tags]);
 
     // Auto-generate slug from title
     const handleTitleChange = (title: string) => {
@@ -90,9 +102,29 @@ export default function BlogEditor({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Validate required fields
+        if (!formData.title.trim()) {
+            alert('Title is required');
+            return;
+        }
+
+        if (!formData.slug.trim()) {
+            alert('Slug is required');
+            return;
+        }
+
+        if (!formData.content.trim()) {
+            alert('Content is required');
+            return;
+        }
+
         setIsSaving(true);
         try {
             await onSave(formData);
+        } catch (error) {
+            console.error('Save error:', error);
+            // Error handling is done in parent component
         } finally {
             setIsSaving(false);
         }
